@@ -1,4 +1,4 @@
-import { GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLID, GraphQLInt, GraphQLObjectType, GraphQLString } from "graphql";
 
 //REST
 export interface UserREST {
@@ -7,10 +7,43 @@ export interface UserREST {
 }
 
 //GraphQL
-export let userGraphQL = new GraphQLObjectType({
-    name: "User",
-    fields: {
-        id: { type: GraphQLString },
+const ContactType = new GraphQLObjectType({
+    name: "Contact",
+    fields: () => ({
+        id: { type: GraphQLID },
         name: { type: GraphQLString },
+        email: { type: GraphQLString },
+        phone: { type: GraphQLInt },
+    }),
+
+})
+
+const ManufacturerType = new GraphQLObjectType({
+    name: "Manufacturer",
+    fields: {
+        id: { type: GraphQLID },
+        name: { type: GraphQLString },
+        description: { type: GraphQLString },
+        country: { type: GraphQLString },
+        website: { type: GraphQLString },
+        address: { type: GraphQLString },
+        contact: { type: ContactType }
     },
 })
+
+
+const ProductType = new GraphQLObjectType({
+    name: "Product",
+    fields: {
+        id: { type: GraphQLID },
+        name: { type: GraphQLString },
+        sku: { type: GraphQLString },
+        description: { type: GraphQLString },
+        price: { type: GraphQLInt },
+        category: { type: GraphQLString },
+        manufacturer: { type: ManufacturerType },
+        amountInStock: { type: GraphQLInt }
+    },
+})
+
+export { ContactType, ManufacturerType, ProductType };
