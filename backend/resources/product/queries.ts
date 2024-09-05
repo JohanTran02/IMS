@@ -1,6 +1,7 @@
 import { GraphQLID, GraphQLList, GraphQLObjectType } from "graphql";
-import { Product } from "../../models/models";
-import { ProductType } from "../../models/schema";
+import { ProductType, totalStockValueType } from "../../models/schema";
+import { getProduct, getProducts, getTotalStockValue } from "./resolvers";
+
 
 export const productQuery = new GraphQLObjectType({
     name: "productQuery",
@@ -8,7 +9,7 @@ export const productQuery = new GraphQLObjectType({
         products: {
             type: new GraphQLList(ProductType),
             resolve: async () => {
-                return await Product.find({});
+                return getProducts();
             }
         },
         product: {
@@ -17,7 +18,13 @@ export const productQuery = new GraphQLObjectType({
                 _id: { type: GraphQLID },
             },
             resolve: async (_, { _id }) => {
-                return await Product.findById(_id);
+                return getProduct(_id)
+            }
+        },
+        totalStockValue: {
+            type: new GraphQLList(totalStockValueType),
+            resolve: async () => {
+                return getTotalStockValue();
             }
         }
     })
