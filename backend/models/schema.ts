@@ -10,10 +10,9 @@ export interface UserREST {
 const ContactType = new GraphQLObjectType({
     name: "Contact",
     fields: () => ({
-        id: { type: GraphQLID },
         name: { type: GraphQLString },
         email: { type: GraphQLString },
-        phone: { type: GraphQLInt },
+        phone: { type: GraphQLString },
     }),
 
 })
