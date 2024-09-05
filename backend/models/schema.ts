@@ -21,7 +21,7 @@ const ContactType = new GraphQLObjectType({
 const ManufacturerType = new GraphQLObjectType({
     name: "Manufacturer",
     fields: {
-        id: { type: GraphQLID },
+        _id: { type: GraphQLID },
         name: { type: GraphQLString },
         description: { type: GraphQLString },
         country: { type: GraphQLString },
@@ -35,7 +35,7 @@ const ManufacturerType = new GraphQLObjectType({
 const ProductType = new GraphQLObjectType({
     name: "Product",
     fields: {
-        id: { type: GraphQLID },
+        _id: { type: GraphQLID },
         name: { type: GraphQLString },
         sku: { type: GraphQLString },
         description: { type: GraphQLString },
@@ -46,4 +46,4 @@ const ProductType = new GraphQLObjectType({
     },
 })
 
-export { ContactType, ManufacturerType, ProductType };
+export { ManufacturerType, ProductType };
