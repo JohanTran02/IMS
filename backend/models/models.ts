@@ -1,11 +1,9 @@
-import { Schema, Types } from "mongoose";
 import { mongoose } from "../connect"
 
 interface IContact {
-    id: String,
     name: String,
     email: String,
-    phone: Number
+    phone: String
 }
 
 interface IManufacturer {
@@ -25,7 +23,7 @@ interface IProduct {
     description: String,
     price: Number,
     category: String,
-    manufacturer: Types.ObjectId,
+    manufacturer: IManufacturer,
     amountInStock: Number
 }
 
@@ -46,7 +44,8 @@ const productSchema = new mongoose.Schema<IProduct>({
     description: String,
     price: Number,
     category: String,
-    manufacturer: { type: Schema.Types.ObjectId, ref: "Manufacturer" },
+    // manufacturer: [{ type: Schema.Types.ObjectId, ref: "Manufacturer" }],
+    manufacturer: [manufacturerSchema],
     amountInStock: Number
 })
 
