@@ -1,6 +1,6 @@
 import { GraphQLID, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
 import { ProductType, totalStockValueType } from "../../models/schema";
-import { getlowStockProducts, getProduct, getProducts, getTotalStockValue, getTotalStockValueByManufacturer } from "./resolvers";
+import { getCriticalStockProducts, getlowStockProducts, getProduct, getProducts, getTotalStockValue, getTotalStockValueByManufacturer } from "./resolvers";
 
 
 export const productQuery = new GraphQLObjectType({
@@ -40,6 +40,12 @@ export const productQuery = new GraphQLObjectType({
             type: new GraphQLList(ProductType),
             resolve: async () => {
                 return getlowStockProducts();
+            }
+        },
+        criticalStockProducts: {
+            type: new GraphQLList(ProductType),
+            resolve: async () => {
+                return getCriticalStockProducts();
             }
         }
     })
