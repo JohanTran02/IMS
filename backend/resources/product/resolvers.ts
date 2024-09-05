@@ -30,3 +30,7 @@ export const getTotalStockValueByManufacturer = async (manufacturerName: string)
         }
     }])
 }
+
+export const getlowStockProducts = async () => {
+    return await Product.find({}).where("amountInStock").lt(10);
+}
