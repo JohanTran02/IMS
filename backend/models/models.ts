@@ -1,36 +1,56 @@
+import { Schema, Types } from "mongoose";
 import { mongoose } from "../connect"
 
-const contactSchema = new mongoose.Schema({
+interface IContact {
     id: String,
     name: String,
     email: String,
     phone: Number
-});
+}
 
-const manufacturerSchema = new mongoose.Schema({
+interface IManufacturer {
     id: String,
     name: String,
     description: String,
     country: String,
     website: String,
     address: String,
-    contacts: { type: mongoose.SchemaTypes.ObjectId, contactSchema }
-});
+    contact: IContact
+}
 
-const productSchema = new mongoose.Schema({
+interface IProduct {
     id: String,
     name: String,
     sku: String,
     description: String,
     price: Number,
     category: String,
-    manufacturer: { type: mongoose.SchemaTypes.ObjectId, manufacturerSchema },
+    manufacturer: Types.ObjectId,
+    amountInStock: Number
+}
+
+const manufacturerSchema = new mongoose.Schema<IManufacturer>({
+    id: String,
+    name: String,
+    description: String,
+    country: String,
+    website: String,
+    address: String,
+    contact: {} as IContact
+});
+
+const productSchema = new mongoose.Schema<IProduct>({
+    id: String,
+    name: String,
+    sku: String,
+    description: String,
+    price: Number,
+    category: String,
+    manufacturer: { type: Schema.Types.ObjectId, ref: "Manufacturer" },
     amountInStock: Number
 })
 
-
-const Contact = mongoose.model("Contact", contactSchema);
 const Product = mongoose.model("Product", productSchema);
 const Manufacturer = mongoose.model("Manufacturer", manufacturerSchema);
 
-export { Contact, Product, Manufacturer }
+export { Product, Manufacturer }

@@ -4,7 +4,7 @@ import { createHandler } from "graphql-http/lib/use/express";
 import { connectToDB } from "./connect";
 import cors from "cors"
 import { ruruHTML } from "ruru/server"
-import { contactQuery } from "./resources/contact/queries"
+// import { contactQuery } from "./resources/contact/queries"
 import { manufacturerQuery } from "./resources/manufacturer/queries"
 import { productQuery } from "./resources/product/queries"
 
@@ -19,7 +19,7 @@ const RootQuery = new GraphQLObjectType({
     name: "RootQuery",
     description: "Root query for all READ endpoints",
     fields: {
-        contact: { type: contactQuery, resolve: () => ({}) },
+        // contact: { type: contactQuery, resolve: () => ({}) },
         manufacturer: { type: manufacturerQuery, resolve: () => ({}) },
         product: { type: productQuery, resolve: () => ({}) }
     },
