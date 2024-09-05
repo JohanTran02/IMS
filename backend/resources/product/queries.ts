@@ -5,7 +5,7 @@ import { ProductType } from "../../models/schema";
 export const productQuery = new GraphQLObjectType({
     name: "productQuery",
     fields: () => ({
-        contacts: {
+        products: {
             type: new GraphQLList(ProductType),
             resolve: async () => {
                 return await Product.find({});
