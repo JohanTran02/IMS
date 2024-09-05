@@ -45,7 +45,7 @@ const productSchema = new mongoose.Schema<IProduct>({
     price: Number,
     category: String,
     // manufacturer: [{ type: Schema.Types.ObjectId, ref: "Manufacturer" }],
-    manufacturer: [manufacturerSchema],
+    manufacturer: manufacturerSchema,
     amountInStock: Number
 })
 

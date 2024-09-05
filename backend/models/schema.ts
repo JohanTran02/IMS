@@ -1,4 +1,4 @@
-import { GraphQLID, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLID, GraphQLInt, GraphQLObjectType, GraphQLString } from "graphql";
 
 //REST
 export interface UserREST {
@@ -40,7 +40,7 @@ const ProductType = new GraphQLObjectType({
         description: { type: GraphQLString },
         price: { type: GraphQLInt },
         category: { type: GraphQLString },
-        manufacturer: { type: new GraphQLList(ManufacturerType) },
+        manufacturer: { type: ManufacturerType },
         amountInStock: { type: GraphQLInt }
     },
 })
@@ -51,6 +51,5 @@ const totalStockValueType = new GraphQLObjectType({
         total: { type: GraphQLInt }
     }
 })
-
 
 export { totalStockValueType, ManufacturerType, ProductType };

@@ -18,3 +18,15 @@ export const getTotalStockValue = async () => {
         }
     }])
 }
+
+export const getTotalStockValueByManufacturer = async (manufacturerName: string) => {
+    return await Product.aggregate([{ $match: { "manufacturer.name": manufacturerName } },
+    { $project: { price: 1, amountInStock: 1, total: { $multiply: ["$price", "$amountInStock"] } } }, {
+        $group: {
+            _id: null,
+            total: {
+                $sum: "$total"
+            }
+        }
+    }])
+}
