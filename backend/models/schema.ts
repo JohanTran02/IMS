@@ -30,7 +30,6 @@ const ManufacturerType = new GraphQLObjectType({
     },
 })
 
-
 const ProductType = new GraphQLObjectType({
     name: "Product",
     fields: {

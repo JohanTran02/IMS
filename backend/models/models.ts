@@ -7,7 +7,7 @@ interface IContact {
 }
 
 interface IManufacturer {
-    id: String,
+    _id: String,
     name: String,
     description: String,
     country: String,
@@ -17,7 +17,7 @@ interface IManufacturer {
 }
 
 interface IProduct {
-    id: String,
+    _id: String,
     name: String,
     sku: String,
     description: String,
@@ -27,8 +27,11 @@ interface IProduct {
     amountInStock: Number
 }
 
-const manufacturerSchema = new mongoose.Schema<IManufacturer>({
-    id: String,
+type ProductType = mongoose.Model<IProduct>;
+type ManufacturerType = mongoose.Model<IManufacturer>;
+
+const manufacturerSchema = new mongoose.Schema<IManufacturer, ManufacturerType>({
+    _id: String,
     name: String,
     description: String,
     country: String,
@@ -37,8 +40,8 @@ const manufacturerSchema = new mongoose.Schema<IManufacturer>({
     contact: {} as IContact
 });
 
-const productSchema = new mongoose.Schema<IProduct>({
-    id: String,
+const productSchema = new mongoose.Schema<IProduct, ProductType>({
+    _id: String,
     name: String,
     sku: String,
     description: String,
@@ -49,7 +52,7 @@ const productSchema = new mongoose.Schema<IProduct>({
     amountInStock: Number
 })
 
-const Product = mongoose.model("Product", productSchema);
 const Manufacturer = mongoose.model("Manufacturer", manufacturerSchema);
+const Product = mongoose.model<IProduct, ProductType>("Product", productSchema);
 
 export { Product, Manufacturer }

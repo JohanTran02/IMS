@@ -1,5 +1,32 @@
 import { Product } from "../../models/models"
 
+interface IContact {
+    name: String,
+    email: String,
+    phone: String
+}
+
+interface IManufacturer {
+    _id: String,
+    name: String,
+    description: String,
+    country: String,
+    website: String,
+    address: String,
+    contact: IContact
+}
+
+interface IProduct {
+    _id: String,
+    name: String,
+    sku: String,
+    description: String,
+    price: Number,
+    category: String,
+    manufacturer: IManufacturer,
+    amountInStock: Number
+}
+
 export const getProducts = async () => {
     return await Product.find({});
 }
@@ -37,4 +64,10 @@ export const getlowStockProducts = async () => {
 
 export const getCriticalStockProducts = async () => {
     return await Product.find({}).where("amountInStock").lt(5);
+}
+
+export const getManufacturers = async (): Promise<IManufacturer[]> => {
+    const products: IProduct[] = await Product.aggregate([{ $project: { manufacturer: 1 } }])
+    const manufacturers = products.map(product => product.manufacturer)
+    return manufacturers;
 }

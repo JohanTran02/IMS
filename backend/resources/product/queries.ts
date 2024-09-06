@@ -1,7 +1,21 @@
 import { GraphQLID, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
-import { ProductType, totalStockValueType } from "../../models/schema";
-import { getCriticalStockProducts, getlowStockProducts, getProduct, getProducts, getTotalStockValue, getTotalStockValueByManufacturer } from "./resolvers";
+import { ManufacturerType, ProductType, totalStockValueType } from "../../models/schema";
+import { getCriticalStockProducts, getlowStockProducts, getProduct, getProducts, getTotalStockValue, getTotalStockValueByManufacturer, getManufacturers } from "./resolvers";
+interface IContact {
+    name: String,
+    email: String,
+    phone: String
+}
 
+interface IManufacturer {
+    _id: String,
+    name: String,
+    description: String,
+    country: String,
+    website: String,
+    address: String,
+    contact: IContact
+}
 
 export const productQuery = new GraphQLObjectType({
     name: "productQuery",
@@ -46,6 +60,12 @@ export const productQuery = new GraphQLObjectType({
             type: new GraphQLList(ProductType),
             resolve: async () => {
                 return getCriticalStockProducts();
+            }
+        },
+        manufacturers: {
+            type: new GraphQLList(ManufacturerType),
+            resolve: async (): Promise<IManufacturer[]> => {
+                return getManufacturers();
             }
         }
     })
