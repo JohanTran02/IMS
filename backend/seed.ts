@@ -35,7 +35,7 @@ interface IProduct {
 function generateData(): IProduct[] {
     const array: IProduct[] = [];
 
-    for (let i = 0; i <= 5; i++) {
+    for (let i = 0; i <= 1000; i++) {
         const fakeProduct = createRandomProduct();
         array.push(fakeProduct);
     }
@@ -75,15 +75,15 @@ function createRandomManufacturer(): IManufacturer {
 const fakeData = generateData()
 
 //Generera testdata
-// await Product.insertMany(fakeData).then(() => {
-//     console.log("Succesfully saved products");
-//     mongoose.connection.close();
-//     process.exit(0);
-// }).catch((err) => console.log(err));
-
-//Ta bort testdata
-await Product.deleteMany({}).then(() => {
-    console.log("Succesfully removed all products");
+await Product.insertMany(fakeData).then(() => {
+    console.log("Succesfully saved products");
     mongoose.connection.close();
     process.exit(0);
 }).catch((err) => console.log(err));
+
+//Ta bort testdata
+// await Product.deleteMany({}).then(() => {
+//     console.log("Succesfully removed all products");
+//     mongoose.connection.close();
+//     process.exit(0);
+// }).catch((err) => console.log(err));

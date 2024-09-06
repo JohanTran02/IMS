@@ -30,7 +30,6 @@ const ManufacturerType = new GraphQLObjectType({
     },
 })
 
-
 const ProductType = new GraphQLObjectType({
     name: "Product",
     fields: {
@@ -45,4 +44,11 @@ const ProductType = new GraphQLObjectType({
     },
 })
 
-export { ManufacturerType, ProductType };
+const totalStockValueType = new GraphQLObjectType({
+    name: "TotalStockValue",
+    fields: {
+        total: { type: GraphQLInt }
+    }
+})
+
+export { totalStockValueType, ManufacturerType, ProductType };

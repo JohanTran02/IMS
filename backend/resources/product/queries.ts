@@ -1,14 +1,71 @@
-import { GraphQLList, GraphQLObjectType } from "graphql";
-import { Product } from "../../models/models";
-import { ProductType } from "../../models/schema";
+import { GraphQLID, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
+import { ManufacturerType, ProductType, totalStockValueType } from "../../models/schema";
+import { getCriticalStockProducts, getlowStockProducts, getProduct, getProducts, getTotalStockValue, getTotalStockValueByManufacturer, getManufacturers } from "./resolvers";
+interface IContact {
+    name: String,
+    email: String,
+    phone: String
+}
+
+interface IManufacturer {
+    _id: String,
+    name: String,
+    description: String,
+    country: String,
+    website: String,
+    address: String,
+    contact: IContact
+}
 
 export const productQuery = new GraphQLObjectType({
     name: "productQuery",
     fields: () => ({
-        contacts: {
+        products: {
             type: new GraphQLList(ProductType),
             resolve: async () => {
-                return await Product.find({});
+                return getProducts();
+            }
+        },
+        product: {
+            type: ProductType,
+            args: {
+                _id: { type: GraphQLID },
+            },
+            resolve: async (_, { _id }) => {
+                return getProduct(_id)
+            }
+        },
+        totalStockValue: {
+            type: new GraphQLList(totalStockValueType),
+            resolve: async () => {
+                return getTotalStockValue();
+            }
+        },
+        totalStockValueByManufacturer: {
+            type: new GraphQLList(totalStockValueType),
+            args: {
+                manufacturerName: { type: GraphQLString },
+            },
+            resolve: async (_, { manufacturerName }) => {
+                return getTotalStockValueByManufacturer(manufacturerName);
+            }
+        },
+        lowStockProducts: {
+            type: new GraphQLList(ProductType),
+            resolve: async () => {
+                return getlowStockProducts();
+            }
+        },
+        criticalStockProducts: {
+            type: new GraphQLList(ProductType),
+            resolve: async () => {
+                return getCriticalStockProducts();
+            }
+        },
+        manufacturers: {
+            type: new GraphQLList(ManufacturerType),
+            resolve: async (): Promise<IManufacturer[]> => {
+                return getManufacturers();
             }
         }
     })

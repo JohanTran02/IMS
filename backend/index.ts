@@ -7,6 +7,7 @@ import { ruruHTML } from "ruru/server"
 // import { contactQuery } from "./resources/contact/queries"
 import { manufacturerQuery } from "./resources/manufacturer/queries"
 import { productQuery } from "./resources/product/queries"
+// import { productMutation } from './resources/product/mutation';
 
 connectToDB();
 const app = express();
@@ -23,10 +24,19 @@ const RootQuery = new GraphQLObjectType({
         manufacturer: { type: manufacturerQuery, resolve: () => ({}) },
         product: { type: productQuery, resolve: () => ({}) }
     },
-})
+});
+
+// const RootMutation = new GraphQLObjectType({
+//     name: "RootMutation",
+//     description: "Root mutation for all CREATE,DELETE and UPDATE endpoints",
+//     fields: {
+//         productMutation: { type: productMutation, resolve: () => ({}) },
+//     }
+// });
 
 const schema = new GraphQLSchema({
-    query: RootQuery
+    query: RootQuery,
+    // mutation: RootMutation
 })
 
 app.get("/", (_req, res) => {
