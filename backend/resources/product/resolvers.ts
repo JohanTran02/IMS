@@ -1,5 +1,6 @@
 import { Product } from "../../models/models"
 
+//TODO #25 Import the interface instead of defining it in every file @JohanTran02
 interface IContact {
     name: String,
     email: String,

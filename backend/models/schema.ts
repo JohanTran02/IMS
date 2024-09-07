@@ -1,4 +1,4 @@
-import { GraphQLID, GraphQLInt, GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLID, GraphQLInputObjectType, GraphQLInt, GraphQLObjectType, GraphQLString } from "graphql";
 
 //REST
 export interface UserREST {
@@ -51,4 +51,42 @@ const totalStockValueType = new GraphQLObjectType({
     }
 })
 
-export { totalStockValueType, ManufacturerType, ProductType };
+
+const ContactInputType = new GraphQLInputObjectType({
+    name: "ContactInput",
+    fields: () => ({
+        name: { type: GraphQLString },
+        email: { type: GraphQLString },
+        phone: { type: GraphQLString },
+    }),
+
+})
+
+const ManufacturerInputType = new GraphQLInputObjectType({
+    name: "ManufacturerInput",
+    fields: {
+        _id: { type: GraphQLID },
+        name: { type: GraphQLString },
+        description: { type: GraphQLString },
+        country: { type: GraphQLString },
+        website: { type: GraphQLString },
+        address: { type: GraphQLString },
+        contact: { type: ContactInputType }
+    },
+})
+
+const ProductInputType = new GraphQLInputObjectType({
+    name: "ProductInput",
+    fields: {
+        _id: { type: GraphQLID },
+        name: { type: GraphQLString },
+        sku: { type: GraphQLString },
+        description: { type: GraphQLString },
+        price: { type: GraphQLInt },
+        category: { type: GraphQLString },
+        manufacturer: { type: ManufacturerInputType },
+        amountInStock: { type: GraphQLInt }
+    }
+});
+
+export { ProductInputType, totalStockValueType, ManufacturerType, ProductType };
