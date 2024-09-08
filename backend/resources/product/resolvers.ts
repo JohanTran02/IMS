@@ -1,32 +1,6 @@
 import { Product } from "../../models/models"
-
-//TODO #25 Import the interface instead of defining it in every file @JohanTran02
-interface IContact {
-    name: String,
-    email: String,
-    phone: String
-}
-
-interface IManufacturer {
-    _id: String,
-    name: String,
-    description: String,
-    country: String,
-    website: String,
-    address: String,
-    contact: IContact
-}
-
-interface IProduct {
-    _id: String,
-    name: String,
-    sku: String,
-    description: String,
-    price: Number,
-    category: String,
-    manufacturer: IManufacturer,
-    amountInStock: Number
-}
+import { IManufacturer } from "../manufacturer/types";
+import { IProduct } from "./types";
 
 export const getProducts = async () => {
     return await Product.find({});
