@@ -1,4 +1,4 @@
-import { GraphQLID, GraphQLInputObjectType, GraphQLInt, GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLID, GraphQLInputObjectType, GraphQLInt, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 
 //REST
 export interface UserREST {
@@ -55,8 +55,8 @@ const totalStockValueType = new GraphQLObjectType({
 const ContactInputType = new GraphQLInputObjectType({
     name: "ContactInput",
     fields: () => ({
-        name: { type: GraphQLString },
-        email: { type: GraphQLString },
+        name: { type: new GraphQLNonNull(GraphQLString) },
+        email: { type: new GraphQLNonNull(GraphQLString) },
         phone: { type: GraphQLString },
     }),
 
@@ -65,12 +65,11 @@ const ContactInputType = new GraphQLInputObjectType({
 const ManufacturerInputType = new GraphQLInputObjectType({
     name: "ManufacturerInput",
     fields: {
-        _id: { type: GraphQLID },
-        name: { type: GraphQLString },
+        name: { type: new GraphQLNonNull(GraphQLString) },
         description: { type: GraphQLString },
-        country: { type: GraphQLString },
+        country: { type: new GraphQLNonNull(GraphQLString) },
         website: { type: GraphQLString },
-        address: { type: GraphQLString },
+        address: { type: new GraphQLNonNull(GraphQLString) },
         contact: { type: ContactInputType }
     },
 })
@@ -78,14 +77,12 @@ const ManufacturerInputType = new GraphQLInputObjectType({
 const ProductInputType = new GraphQLInputObjectType({
     name: "ProductInput",
     fields: {
-        _id: { type: GraphQLID },
-        name: { type: GraphQLString },
-        sku: { type: GraphQLString },
+        name: { type: new GraphQLNonNull(GraphQLString) },
         description: { type: GraphQLString },
-        price: { type: GraphQLInt },
+        price: { type: new GraphQLNonNull(GraphQLInt) },
         category: { type: GraphQLString },
         manufacturer: { type: ManufacturerInputType },
-        amountInStock: { type: GraphQLInt }
+        amountInStock: { type: new GraphQLNonNull(GraphQLInt) }
     }
 });
 

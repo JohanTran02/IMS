@@ -1,6 +1,7 @@
 import { Product } from "../../models/models"
 import { IManufacturer } from "../manufacturer/types";
 import { IProduct } from "./types";
+import { faker } from "@faker-js/faker";
 
 export const getProducts = async () => {
     return await Product.find({});
@@ -45,4 +46,29 @@ export const getManufacturers = async (): Promise<IManufacturer[]> => {
     const products: IProduct[] = await Product.aggregate([{ $project: { manufacturer: 1 } }])
     const manufacturers = products.map(product => product.manufacturer)
     return manufacturers;
+}
+
+export const addProduct = async (input) => {
+    const newProduct = {
+        _id: faker.database.mongodbObjectId(),
+        name: input.name,
+        sku: input.sku || faker.commerce.isbn(),
+        description: input.description || "",
+        price: input.price,
+        category: input.category || "",
+        manufacturer: {
+            _id: faker.database.mongodbObjectId(),
+            name: input.manufacturer.name,
+            description: input.manufacturer.description || "",
+            country: input.manufacturer.country,
+            address: input.manufacturer.address,
+            contact: {
+                name: input.manufacturer.contact.name,
+                email: input.manufacturer.contact.email
+            }
+        },
+        amountInStock: input.amountInStock || 0
+    }
+
+    return await Product.create(newProduct);
 }
