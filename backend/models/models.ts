@@ -56,3 +56,4 @@ const Manufacturer = mongoose.model("Manufacturer", manufacturerSchema);
 const Product = mongoose.model<IProduct, ProductType>("Product", productSchema);
 
 export { Product, Manufacturer }
+
