@@ -1,6 +1,6 @@
 import { GraphQLID, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 import { ProductInputType, ProductType } from "../../models/schema";
-import { addProduct, deleteProduct } from "./resolvers";
+import { addProduct, deleteProduct, updateProduct } from "./resolvers";
 
 export const productMutation = new GraphQLObjectType({
     name: "productMutations",
@@ -25,6 +25,12 @@ export const productMutation = new GraphQLObjectType({
             },
             resolve: async (_, { _id }) => {
                 return deleteProduct(_id);
+            }
+        },
+        updateProduct: {
+            type: ProductType,
+            resolve: async (_, { _id }) => {
+                return updateProduct(_id)
             }
         }
     })
