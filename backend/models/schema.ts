@@ -1,4 +1,4 @@
-import { GraphQLID, GraphQLInt, GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLID, GraphQLInputObjectType, GraphQLInt, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 
 //REST
 export interface UserREST {
@@ -51,4 +51,49 @@ const totalStockValueType = new GraphQLObjectType({
     }
 })
 
-export { totalStockValueType, ManufacturerType, ProductType };
+const ContactInputType = new GraphQLInputObjectType({
+    name: "ContactInput",
+    fields: () => ({
+        name: { type: new GraphQLNonNull(GraphQLString) },
+        email: { type: new GraphQLNonNull(GraphQLString) },
+        phone: { type: GraphQLString },
+    }),
+
+})
+
+const ManufacturerInputType = new GraphQLInputObjectType({
+    name: "ManufacturerInput",
+    fields: {
+        name: { type: new GraphQLNonNull(GraphQLString) },
+        description: { type: GraphQLString },
+        country: { type: new GraphQLNonNull(GraphQLString) },
+        website: { type: GraphQLString },
+        address: { type: new GraphQLNonNull(GraphQLString) },
+        contact: { type: ContactInputType }
+    },
+})
+
+const CreateProductInput = new GraphQLInputObjectType({
+    name: "CreateProductInput",
+    fields: {
+        name: { type: new GraphQLNonNull(GraphQLString) },
+        description: { type: GraphQLString },
+        price: { type: new GraphQLNonNull(GraphQLInt) },
+        category: { type: GraphQLString },
+        manufacturer: { type: ManufacturerInputType },
+        amountInStock: { type: new GraphQLNonNull(GraphQLInt) }
+    }
+});
+
+const UpdateProductInput = new GraphQLInputObjectType({
+    name: "UpdateProductInput",
+    fields: {
+        name: { type: GraphQLString },
+        description: { type: GraphQLString },
+        price: { type: GraphQLInt },
+        category: { type: GraphQLString },
+        manufacturer: { type: ManufacturerInputType },
+        amountInStock: { type: GraphQLInt }
+    }
+});
+export { CreateProductInput, UpdateProductInput, totalStockValueType, ManufacturerType, ProductType };

@@ -1,31 +1,7 @@
 import { Product } from "../../models/models"
-
-interface IContact {
-    name: String,
-    email: String,
-    phone: String
-}
-
-interface IManufacturer {
-    _id: String,
-    name: String,
-    description: String,
-    country: String,
-    website: String,
-    address: String,
-    contact: IContact
-}
-
-interface IProduct {
-    _id: String,
-    name: String,
-    sku: String,
-    description: String,
-    price: Number,
-    category: String,
-    manufacturer: IManufacturer,
-    amountInStock: Number
-}
+import { IManufacturer } from "../manufacturer/types";
+import { IProduct } from "./types";
+import { faker } from "@faker-js/faker";
 
 export const getProducts = async () => {
     return await Product.find({});
@@ -71,3 +47,36 @@ export const getManufacturers = async (): Promise<IManufacturer[]> => {
     const manufacturers = products.map(product => product.manufacturer)
     return manufacturers;
 }
+
+export const addProduct = async (input) => {
+    const newProduct = {
+        _id: faker.database.mongodbObjectId(),
+        name: input.name,
+        sku: input.sku || faker.commerce.isbn(),
+        description: input.description || "",
+        price: input.price,
+        category: input.category || "",
+        manufacturer: {
+            _id: faker.database.mongodbObjectId(),
+            name: input.manufacturer.name,
+            description: input.manufacturer.description || "",
+            country: input.manufacturer.country,
+            address: input.manufacturer.address,
+            contact: {
+                name: input.manufacturer.contact.name,
+                email: input.manufacturer.contact.email
+            }
+        },
+        amountInStock: input.amountInStock || 0
+    }
+
+    return await Product.create(newProduct);
+}
+
+export const deleteProduct = async (_id) => {
+    return await Product.findByIdAndDelete(_id)
+}
+
+export const updateProduct = async (_id, input) => {
+    return await Product.findByIdAndUpdate(_id, input)
+} 
