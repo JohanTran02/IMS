@@ -75,4 +75,8 @@ export const addProduct = async (input) => {
 
 export const deleteProduct = async (_id) => {
     return await Product.findByIdAndDelete(_id)
+}
+
+export const updateProduct = async (_id, input) => {
+    return await Product.findByIdAndUpdate(_id, input)
 } 
