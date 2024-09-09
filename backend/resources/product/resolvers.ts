@@ -72,3 +72,7 @@ export const addProduct = async (input) => {
 
     return await Product.create(newProduct);
 }
+
+export const deleteProduct = async (_id) => {
+    return await Product.findByIdAndDelete(_id)
+} 
