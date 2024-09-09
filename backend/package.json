@@ -5,7 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsx watch index.ts",
-    "seed": "tsx seed.ts"
+    "seed": "npx tsx seed.ts",
+    "rest": "tsx indexRest.ts"
   },
   "type": "module",
   "keywords": [],
