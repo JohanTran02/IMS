@@ -1,31 +1,7 @@
 import { mongoose } from "../connect"
-
-interface IContact {
-    name: String,
-    email: String,
-    phone: String
-}
-
-interface IManufacturer {
-    _id: String,
-    name: String,
-    description: String,
-    country: String,
-    website: String,
-    address: String,
-    contact: IContact
-}
-
-interface IProduct {
-    _id: String,
-    name: String,
-    sku: String,
-    description: String,
-    price: Number,
-    category: String,
-    manufacturer: IManufacturer,
-    amountInStock: Number
-}
+import { IContact } from "../resources/contact/types";
+import { IManufacturer } from "../resources/manufacturer/types";
+import { IProduct } from "../resources/product/types";
 
 type ProductType = mongoose.Model<IProduct>;
 type ManufacturerType = mongoose.Model<IManufacturer>;

@@ -2,35 +2,10 @@ import { faker } from "@faker-js/faker";
 import { Product } from "./models/models";
 import { connectToDB } from "./connect";
 import mongoose from "mongoose";
+import { IManufacturer } from "./resources/manufacturer/types";
+import { IProduct } from "./resources/product/types";
 
 connectToDB()
-
-interface IContact {
-    name: String,
-    email: String,
-    phone: String
-}
-
-interface IManufacturer {
-    _id: String,
-    name: String,
-    description: String,
-    country: String,
-    website: String,
-    address: String,
-    contact: IContact
-}
-
-interface IProduct {
-    _id: String,
-    name: String,
-    sku: String,
-    description: String,
-    price: Number,
-    category: String,
-    manufacturer: IManufacturer,
-    amountInStock: Number
-}
 
 function generateData(): IProduct[] {
     const array: IProduct[] = [];
@@ -75,15 +50,15 @@ function createRandomManufacturer(): IManufacturer {
 const fakeData = generateData()
 
 //Generera testdata
-await Product.insertMany(fakeData).then(() => {
-    console.log("Succesfully saved products");
-    mongoose.connection.close();
-    process.exit(0);
-}).catch((err) => console.log(err));
-
-//Ta bort testdata
-// await Product.deleteMany({}).then(() => {
-//     console.log("Succesfully removed all products");
+// await Product.insertMany(fakeData).then(() => {
+//     console.log("Succesfully saved products");
 //     mongoose.connection.close();
 //     process.exit(0);
 // }).catch((err) => console.log(err));
+
+//Ta bort testdata
+await Product.deleteMany({}).then(() => {
+    console.log("Succesfully removed all products");
+    mongoose.connection.close();
+    process.exit(0);
+}).catch((err) => console.log(err));
