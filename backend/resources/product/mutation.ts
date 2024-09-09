@@ -1,5 +1,5 @@
 import { GraphQLID, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
-import { ProductInputType, ProductType } from "../../models/schema";
+import { CreateProductInput, ProductType, UpdateProductInput } from "../../models/schema";
 import { addProduct, deleteProduct, updateProduct } from "./resolvers";
 
 export const productMutation = new GraphQLObjectType({
@@ -9,7 +9,7 @@ export const productMutation = new GraphQLObjectType({
             type: ProductType,
             args: {
                 input: {
-                    type: ProductInputType
+                    type: CreateProductInput
                 }
             },
             resolve: async (_, { input }) => {
@@ -29,8 +29,13 @@ export const productMutation = new GraphQLObjectType({
         },
         updateProduct: {
             type: ProductType,
-            resolve: async (_, { _id }) => {
-                return updateProduct(_id)
+            args: {
+                input: {
+                    type: UpdateProductInput
+                }
+            },
+            resolve: async (_, { _id, input }) => {
+                return updateProduct(_id, input)
             }
         }
     })

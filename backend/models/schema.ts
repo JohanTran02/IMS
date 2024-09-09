@@ -51,7 +51,6 @@ const totalStockValueType = new GraphQLObjectType({
     }
 })
 
-
 const ContactInputType = new GraphQLInputObjectType({
     name: "ContactInput",
     fields: () => ({
@@ -74,8 +73,8 @@ const ManufacturerInputType = new GraphQLInputObjectType({
     },
 })
 
-const ProductInputType = new GraphQLInputObjectType({
-    name: "ProductInput",
+const CreateProductInput = new GraphQLInputObjectType({
+    name: "CreateProductInput",
     fields: {
         name: { type: new GraphQLNonNull(GraphQLString) },
         description: { type: GraphQLString },
@@ -86,4 +85,15 @@ const ProductInputType = new GraphQLInputObjectType({
     }
 });
 
-export { ProductInputType, totalStockValueType, ManufacturerType, ProductType };
+const UpdateProductInput = new GraphQLInputObjectType({
+    name: "UpdateProductInput",
+    fields: {
+        name: { type: GraphQLString },
+        description: { type: GraphQLString },
+        price: { type: GraphQLInt },
+        category: { type: GraphQLString },
+        manufacturer: { type: ManufacturerInputType },
+        amountInStock: { type: GraphQLInt }
+    }
+});
+export { CreateProductInput, UpdateProductInput, totalStockValueType, ManufacturerType, ProductType };
