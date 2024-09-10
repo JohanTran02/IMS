@@ -30,6 +30,7 @@ export const productMutation = new GraphQLObjectType({
         updateProduct: {
             type: ProductType,
             args: {
+                _id: { type: new GraphQLNonNull(GraphQLID) },
                 input: {
                     type: UpdateProductInput
                 }
