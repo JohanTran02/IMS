@@ -7,7 +7,6 @@ type ProductType = mongoose.Model<IProduct>;
 type ManufacturerType = mongoose.Model<IManufacturer>;
 
 const manufacturerSchema = new mongoose.Schema<IManufacturer, ManufacturerType>({
-    _id: String,
     name: String,
     description: String,
     country: String,
@@ -17,7 +16,6 @@ const manufacturerSchema = new mongoose.Schema<IManufacturer, ManufacturerType>(
 });
 
 const productSchema = new mongoose.Schema<IProduct, ProductType>({
-    _id: String,
     name: String,
     sku: String,
     description: String,

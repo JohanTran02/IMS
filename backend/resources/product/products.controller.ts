@@ -17,7 +17,7 @@ export const getProducts = async (req: Request, res: Response) => {
 // get product by id
 export const getProductById = async (req: Request, res: Response) => {
   const productId : string = req.params.id;
-  console.log(productId);
+ 
   try {
       const product = await Product.findById(productId);
     console.log(product)
@@ -95,3 +95,108 @@ export const deleteProduct = async (req,res) => {
     res.status(500).json({ message: "Server Error", error: err.message });
   }
 }
+
+//get total stock value
+export async function getStockValue (req, res)  {
+  const products = await Product.find();
+
+  try{
+    const TotalProductValue = products.reduce((total, product) => {
+      return total + product.price * product.amountInStock;   
+
+    },0)
+    res.status(200).json({ totalValue: TotalProductValue });
+  }
+  catch (err) {
+    res.status(500).json({ message: "Server Error", error: err.message });
+  }
+}
+
+//get stock value by manifacturer
+export async function getStockValueByManufacturer (req, res)  {
+
+
+
+  try{ 
+  const result = await Product.aggregate([
+          
+            {
+                $group: {
+                    _id: "$manufacturer.name",
+                    Manufacturer: {"$first": "$manufacturer.name"},  
+                    StockValue: { $sum: { $multiply: ["$price", "$amountInStock"] } } 
+                }
+            },
+            
+            { 
+                $sort: { StockValue: -1 } 
+            }
+        ]);
+
+        const FilteredStockValue = result.map(Result => ({
+            manufacturer: Result.Manufacturer,
+            totalAmount: Result.StockValue
+        }));
+
+        res.status(200).json(FilteredStockValue);
+
+
+  }
+  catch (err) {
+    res.status(500).json({ message: "Server Error", error: err.message });
+  }
+};
+
+//get low stock (show products with less than 10 in stock)
+export async function showLowStock (req, res)  {
+  const products = await Product.find() 
+try {
+  const lowStockProducts = products.filter(product => product.amountInStock <= 10);
+  res.status(200).json(lowStockProducts);
+} catch (error) {
+  res.status(500).json({ message: "Server Error", error: error.message });
+  
+}}
+
+
+//show critical stock (less than 5 in stock)
+
+export async function showCriticalStock(req, res) {
+
+  const products = await Product.find();
+
+  try {
+    const filteredProducts = products.filter(product => product.amountInStock <= 5);
+ const critialStockProducts = filteredProducts.map(product => ({
+    AmountInStock: product.amountInStock,
+    Manifacturer: product.manufacturer.name,
+    ContactName: product.manufacturer.contact.name,
+    ContactEmail: product.manufacturer.contact.email,
+    ContactPhone: product.manufacturer.contact.phone
+
+ }))
+
+    res.status(200).json(critialStockProducts);
+  }
+  catch (error) {
+    res.status(500).json({ message: "Server Error", error: error.message });
+  }
+
+}
+
+
+//get manifacturers
+export async function getManufacturers(req, res) {
+
+  try {
+
+    const products = await Product.find();
+    const manufacturers = products.map(product => product.manufacturer);
+
+    res.status(200).json({ manufacturers: manufacturers });
+    
+  } catch (error) {
+        res.status(500).json({ message: "Server Error", error: error.message });
+  }
+}
+  

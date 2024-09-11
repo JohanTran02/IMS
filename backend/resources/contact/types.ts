@@ -1,5 +1,5 @@
 export interface IContact {
-    name: String,
-    email: String,
-    phone: String
+    name: string,
+    email: string,
+    phone: string
 }
