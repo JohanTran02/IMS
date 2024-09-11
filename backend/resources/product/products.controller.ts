@@ -17,7 +17,7 @@ export const getProducts = async (req: Request, res: Response) => {
 // get product by id
 export const getProductById = async (req: Request, res: Response) => {
   const productId : string = req.params.id;
-  console.log(productId);
+ 
   try {
       const product = await Product.findById(productId);
     console.log(product)
@@ -124,7 +124,7 @@ export async function getStockValueByManufacturer (req, res)  {
                 $group: {
                     _id: "$manufacturer.name",
                     Manufacturer: {"$first": "$manufacturer.name"},  
-                    StockValue: { $sum: { $multiply: ["$price", "$quantity"] } } 
+                    StockValue: { $sum: { $multiply: ["$price", "$amountInStock"] } } 
                 }
             },
             
@@ -191,7 +191,7 @@ export async function getManufacturers(req, res) {
   try {
 
     const products = await Product.find();
-    const manufacturers = products.map(product => product.manufacturer.name);
+    const manufacturers = products.map(product => product.manufacturer);
 
     res.status(200).json({ manufacturers: manufacturers });
     
