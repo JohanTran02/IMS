@@ -1,11 +1,11 @@
 import { IContact } from "../contact/types";
 
 export interface IManufacturer {
-    _id: String,
-    name: String,
-    description: String,
-    country: String,
-    website: String,
-    address: String,
+    _id: string,
+    name: string,
+    description: string,
+    country: string,
+    website: string,
+    address: string,
     contact: IContact
 }

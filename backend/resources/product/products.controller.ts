@@ -102,7 +102,7 @@ export async function getStockValue (req, res)  {
 
   try{
     const TotalProductValue = products.reduce((total, product) => {
-     return total * product.price;   //might  have to change  Iproduct (product.price ) to number
+      return total + product.price * product.amountInStock;   
 
     },0)
     res.status(200).json({ totalValue: TotalProductValue });
