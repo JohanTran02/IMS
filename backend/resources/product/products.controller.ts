@@ -199,4 +199,37 @@ export async function getManufacturers(req, res) {
         res.status(500).json({ message: "Server Error", error: error.message });
   }
 }
-  
+
+  //TODO #42 get products by stock amount endpoints @GaKa00 
+// get products by stock amount
+export async function getProductsbyStockAmount(req, res) {
+
+  const bool = req.body
+
+  try {
+    const result = await Product.aggregate([
+      {
+        $group: {
+          _id: "$product.name",
+         name: { $first: "$product.name" },
+          amountInStock: { $first: "$amountInStock" },
+        },
+      },
+    
+      bool ? {
+        $sort: { amountInStock: -1  }
+      } : { $sort: { amountInStock: 1 } }
+    ]);
+
+      const FilteredStockValue = result.map((Result) => ({
+        Product: Result.name,
+        totalAmount: Result.amountInStock,
+      }));
+      
+      res.status(200).json(FilteredStockValue);
+    
+  } catch (err) {
+    res.status(500).json({ message: "Server Error", error: err.message });
+  }
+}
+
