@@ -204,7 +204,7 @@ export async function getManufacturers(req, res) {
 // get products by stock amount
 export async function getProductsbyStockAmount(req, res) {
 
-  const bool = req.body
+    const bool: 1 | -1 = parseInt(req.query.sort) === 1 ? 1 : -1;
 
   try {
     const result = await Product.aggregate([
@@ -233,3 +233,31 @@ export async function getProductsbyStockAmount(req, res) {
   }
 }
 
+
+
+export async function getProductsbyCategory(req, res) {
+
+  try {
+    const result = await Product.aggregate([
+      {
+        $group: {
+          _id: "$name",
+          name: { $first: "$name" },
+          category: { $first: "$category" },
+        },
+      },
+
+      
+    ]);
+
+    const FilteredValue = result.map((Result) => ({
+      category:Result.category,
+      name: Result.name,
+      
+    }));
+
+    res.status(200).json(FilteredValue);
+  } catch (err) {
+    res.status(500).json({ message: "Server Error", error: err.message });
+  }
+}
