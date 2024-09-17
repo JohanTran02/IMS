@@ -210,15 +210,13 @@ export async function getProductsbyStockAmount(req, res) {
     const result = await Product.aggregate([
       {
         $group: {
-          _id: "$product.name",
-         name: { $first: "$product.name" },
+          _id: "$_id",
+          name: { $first: "$name" },
           amountInStock: { $first: "$amountInStock" },
         },
       },
     
-      bool ? {
-        $sort: { amountInStock: -1  }
-      } : { $sort: { amountInStock: 1 } }
+    { $sort: { amountInStock: bool } }
     ]);
 
       const FilteredStockValue = result.map((Result) => ({
