@@ -22,28 +22,30 @@ function App() {
                             activeTab === "product" ? <>
                                 <input type="text" disabled value={"Product name"} className="h-12" />
                                 <input type="text" disabled value={"Product category"} className="h-12" />
-                                <div className="flex gap-8">
+                                <div className="flex gap-4">
                                     <input type="text" disabled value={"Product name"} className="h-12 w-full" />
                                     <input type="text" disabled value={"Product name"} className="h-12 w-full" />
                                 </div>
-                                <textarea disabled value={"Product description"} className="resize-none h-[200px]" /></> :
+                                <textarea disabled value={"Product description"} className="resize-none h-[200px]" />
+                            </> :
                                 <>
                                     <input type="text" disabled value={"Manufacturer name"} className="h-12" />
                                     <input type="text" disabled value={"Manufacturer address"} className="h-12" />
-                                    <div className="flex gap-8">
-                                        <input type="text" disabled value={"Manufacturer country"} className="h-12 w-1/2" />
-                                        <input type="text" disabled value={"Manufacturer website"} className="h-12 w-1/2" />
-                                    </div>
-                                    <div className="flex gap-8">
-                                        <textarea disabled value={"Manufacturer description"} className="resize-none h-[200px] w-1/2" />
-                                        <div className="flex flex-col gap-3 w-1/2">
-                                            <h1 className="text-lg font-bold">Contact</h1>
-                                            <input type="text" disabled value={"Manufacturer name"} className="h-full" />
-                                            <input type="text" disabled value={"Manufacturer email"} className="h-full" />
-                                            <input type="text" disabled value={"Manufacturer phone number"} className="h-full" />
+                                    <div className="flex">
+                                        <div className="flex flex-col gap-8 w-1/2 pr-4">
+                                            <input type="text" disabled value={"Manufacturer country"} className="h-12" />
+                                            <textarea disabled value={"Manufacturer description"} className="resize-none h-[200px]" />
+                                        </div>
+                                        <div className="flex flex-col gap-8 w-1/2">
+                                            <input type="text" disabled value={"Manufacturer website"} className="h-12" />
+                                            <div className="flex flex-col gap-3 flex-1">
+                                                <h1 className="text-lg font-bold">Contact</h1>
+                                                <input type="text" disabled value={"Manufacturer name"} className="h-full" />
+                                                <input type="text" disabled value={"Manufacturer email"} className="h-full" />
+                                                <input type="text" disabled value={"Manufacturer phone number"} className="h-full" />
+                                            </div>
                                         </div>
                                     </div>
-
                                 </>
                         }
                     </div>
