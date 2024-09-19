@@ -8,6 +8,8 @@ import { ruruHTML } from "ruru/server"
 import { manufacturerQuery } from "./resources/manufacturer/queries"
 import { productQuery } from "./resources/product/queries"
 import { productMutation } from './resources/product/mutation';
+import { ApolloServer } from "@apollo/server"
+import { startStandaloneServer } from "@apollo/server/standalone"
 
 connectToDB();
 const app = express();
@@ -39,15 +41,27 @@ const schema = new GraphQLSchema({
     mutation: RootMutation
 })
 
-app.get("/", (_req, res) => {
-    res.type("html")
-    res.end(ruruHTML({ endpoint: "/graphql" }))
-})
+
+const server = new ApolloServer({
+    schema: schema
+});
+
+const { url } = await startStandaloneServer(server, {
+    listen: { port: 4000 },
+});
+
+
+console.log(`Server ready at: ${url}`);
 
 app.all("/graphql", createHandler({
     schema: schema,
 }));
 
-app.listen(port, () => {
-    console.log(`Listening on port ${port}`);
-})
+// app.get("/", (_req, res) => {
+//     res.type("html")
+//     res.end(ruruHTML({ endpoint: "/graphql" }))
+// })
+
+// app.listen(port, () => {
+//     console.log(`Listening on port ${port}`);
+// })

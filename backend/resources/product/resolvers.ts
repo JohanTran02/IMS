@@ -3,8 +3,8 @@ import { IManufacturer } from "../manufacturer/types";
 import { IProduct } from "./types";
 import { faker } from "@faker-js/faker";
 
-export const getProducts = async () => {
-    return await Product.find({});
+export const getProducts = async (limit) => {
+    return await Product.find({}).limit(limit);
 }
 
 export const getProduct = async (_id: string) => {

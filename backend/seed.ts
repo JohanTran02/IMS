@@ -20,7 +20,7 @@ function generateData(): IProduct[] {
 
 function createRandomProduct(): IProduct {
     return {
-        _id: faker.database.mongodbObjectId(),
+        // _id: faker.database.mongodbObjectId(),
         name: faker.commerce.product(),
         sku: faker.commerce.isbn(),
         description: faker.commerce.productDescription(),
