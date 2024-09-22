@@ -1,6 +1,6 @@
 import { IManufacturer } from "../manufacturer/types";
 
-export interface IProduct {
+interface IProduct {
     name: string,
     sku: string,
     description: string,
@@ -9,3 +9,35 @@ export interface IProduct {
     manufacturer: IManufacturer,
     amountInStock: number
 }
+
+interface NumberRangeFilter {
+    gt?: number;
+    gte?: number;
+    lt?: number;
+    lte?: number
+}
+
+interface NumberRangeQuery {
+    $gt?: number;
+    $gte?: number;
+    $lt?: number;
+    $lte?: number
+}
+
+type IGetProductFilterInput = Partial<{
+    price: NumberRangeFilter,
+    amountInStock: NumberRangeFilter,
+    manufacturers: { value: string[] },
+    category: { value: string[] },
+    limit: number
+}>
+
+type ProductQuery = Partial<{
+    price: NumberRangeQuery;
+    amountInStock: NumberRangeQuery;
+    category: { $in: RegExp[] };
+    'manufacturer.name': { $in: RegExp[] };
+}>
+
+
+export { IProduct, NumberRangeFilter, NumberRangeQuery, IGetProductFilterInput, ProductQuery }

@@ -1,11 +1,62 @@
 import { Product } from "../../models/models"
 import { IManufacturer } from "../manufacturer/types";
-import { IProduct } from "./types";
+import { IProduct, IGetProductFilterInput, ProductQuery, NumberRangeFilter, NumberRangeQuery } from "./types";
 import { faker } from "@faker-js/faker";
 
-export const getProducts = async (limit) => {
-    return await Product.find({}).limit(limit);
+export const getProducts = async (input: IGetProductFilterInput) => {
+    if (!input) return await Product.find().limit(0);
+
+    const { amountInStock, price, category, manufacturers, limit } = input;
+    const productLimit = limit ?? 0;
+
+    const query: ProductQuery = {};
+
+    if (amountInStock && Object.keys(amountInStock).length > 0) {
+        query.amountInStock = setNumberRange(amountInStock)
+    }
+
+    if (price && Object.keys(price).length > 0) {
+        query.price = setNumberRange(price)
+    }
+
+    if (category?.value && category?.value.length > 0) {
+        query.category = { $in: setFilteredCategories(category.value) };
+    }
+
+    if (manufacturers?.value && manufacturers?.value.length > 0) {
+        query['manufacturer.name'] = { $in: setFilteredCategories(manufacturers.value) };
+    }
+
+    return Object.keys(query).length > 0
+        ? await Product.find(query).limit(productLimit)
+        : await Product.find().limit(productLimit);
 }
+
+function setFilteredCategories(filters: string[]): RegExp[] {
+    return filters
+        .filter(categoryItem => categoryItem.trim() !== "")
+        .map(categoryItem => new RegExp(`${categoryItem}`, "i"))
+}
+
+function setNumberRange(numberRange: NumberRangeFilter): NumberRangeQuery {
+    const query: NumberRangeQuery = {}
+
+    const operatorMapping: Record<string, string> = {
+        gt: "$gt",
+        gte: "$gte",
+        lt: "$lt",
+        lte: "$lte",
+    };
+
+    for (const [operator, value] of Object.entries(numberRange)) {
+        if (value !== undefined && !isNaN(Number(value))) {
+            query[operatorMapping[operator]] = Number(value);
+        }
+    }
+
+    return query;
+}
+
 
 export const getProduct = async (_id: string) => {
     return await Product.findById(_id);
