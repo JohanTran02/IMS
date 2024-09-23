@@ -1,5 +1,5 @@
 import { GraphQLID, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
-import { ManufacturerType, ProductType, totalStockValueType } from "../../models/schema";
+import { GetProductsFilterInput, ManufacturerType, ProductType, totalStockValueType } from "../../models/schema";
 import { getCriticalStockProducts, getlowStockProducts, getProduct, getProducts, getTotalStockValue, getTotalStockValueByManufacturer, getManufacturers } from "./resolvers";
 import { IManufacturer } from "../manufacturer/types";
 
@@ -9,10 +9,10 @@ export const productQuery = new GraphQLObjectType({
         products: {
             type: new GraphQLList(ProductType),
             args: {
-                limit: { type: GraphQLInt }
+                input: { type: GetProductsFilterInput },
             },
-            resolve: async (_, { limit }) => {
-                return getProducts(limit);
+            resolve: async (_, { input }) => {
+                return getProducts(input);
             }
         },
         product: {

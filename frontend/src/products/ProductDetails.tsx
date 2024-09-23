@@ -1,8 +1,12 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql, TypedDocumentNode, useQuery } from "@apollo/client";
 import { useState } from "react";
 import { IProduct } from "../../../backend/resources/product/types";
 
-const GET_PRODUCTS = gql`
+interface IProductVars {
+    limit: number
+}
+
+const GET_PRODUCTS: TypedDocumentNode<IProduct[], IProductVars> = gql`
     query RootQuery($limit : Int) {  
         product{
             products(limit: $limit){
@@ -30,15 +34,14 @@ const GET_PRODUCTS = gql`
 
 export function ProductDetails() {
     const [activeTab, setActiveTab] = useState<"product" | "manufacturer">("product");
-    const { error, loading, data: { product: { products } = { products: [] } } = {} } = useQuery<{ product: { products: IProduct[] } }>(GET_PRODUCTS, {
+    const { error, loading, data = [] } = useQuery(GET_PRODUCTS, {
         variables: { limit: 10 }
     })
 
     if (loading) return null;
     if (error) return `Error! ${error.message}`;
 
-    console.log(products);
-    const product = products[2];
+    console.log(data)
 
     return (
         <>
@@ -50,13 +53,13 @@ export function ProductDetails() {
                     </div>
                     {
                         activeTab === "product" ? <>
-                            <input type="text" disabled value={`${product.name}`} className="h-12" />
-                            <input type="text" disabled value={`${product.category}`} className="h-12" />
+                            <input type="text" disabled value={`${data[0].name}`} className="h-12" />
+                            <input type="text" disabled value={`${data[0].category}`} className="h-12" />
                             <div className="flex gap-4">
-                                <input type="text" disabled value={`${product.price}`} className="h-12 flex-1 w-0" />
-                                <input type="text" disabled value={`${product.amountInStock}`} className="h-12 flex-1 w-0" />
+                                <input type="text" disabled value={`${data[0].price}`} className="h-12 flex-1 w-0" />
+                                <input type="text" disabled value={`${data[0].amountInStock}`} className="h-12 flex-1 w-0" />
                             </div>
-                            <textarea disabled value={`${product.description}`} className="resize-none h-[200px]" />
+                            <textarea disabled value={`${data[0].description}`} className="resize-none h-[200px]" />
                         </> :
                             <>
                                 <input type="text" disabled value={"Manufacturer name"} className="h-12" />
