@@ -1,16 +1,10 @@
 import { gql, useLazyQuery, TypedDocumentNode } from "@apollo/client";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { IProduct } from "../types";
+import { IProduct, ProductData } from "../types";
 import ProductCard from "./ProductCard";
-
-type ProductData = {
-  product: {
-    products: IProduct[];
-  };
-};
 
 const GET_PRODUCTS: TypedDocumentNode<ProductData, number> = gql`
   query RootQuery($limit: Int) {
@@ -30,6 +24,7 @@ const GET_PRODUCTS: TypedDocumentNode<ProductData, number> = gql`
 `;
 
 export function Products() {
+  const [input, setInput] = useState<string>("");
   const { page, rows } = useSelector((state: RootState) => state.products);
   const dispatch = useDispatch();
 
@@ -80,6 +75,37 @@ export function Products() {
       });
   };
 
+  const contentInRow = (card: IProduct, index: number) => {
+    return (
+      <li
+        key={index}
+        className="flex-none flex justify-between items-center gap-1 h-12 border-b border-gray-200"
+      >
+        <ProductCard
+          name={card.name}
+          sku={card.sku}
+          price={card.price}
+          category={card.category}
+          amountInStock={card.amountInStock}
+          manufacturer={card.manufacturer.name}
+        />
+      </li>
+    );
+  };
+
+  const searchConditions = (card: IProduct, index: number) => {
+    if (card.name.toLocaleLowerCase().includes(input.toLowerCase()))
+      return contentInRow(card, index);
+    if (card.category.toLocaleLowerCase().includes(input.toLowerCase()))
+      return contentInRow(card, index);
+    if (
+      card.manufacturer.name.toLocaleLowerCase().includes(input.toLowerCase())
+    )
+      return contentInRow(card, index);
+
+    return null;
+  };
+
   return (
     <div className="flex h-full gap-2 flex-col">
       <div className="flex flex-1 gap-4 overflow-hidden">
@@ -95,6 +121,8 @@ export function Products() {
                 type="text"
                 placeholder="Search products"
                 className="flex-1 h-full pl-2 outline-none"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
               />
             </div>
           </div>
@@ -116,23 +144,9 @@ export function Products() {
 
               <ul className="overflow-y-auto">
                 {data &&
-                  data.product.products.map((card, index) => {
-                    return (
-                      <li
-                        key={index}
-                        className="flex-none flex justify-between items-center gap-1 h-12 border-b border-gray-200"
-                      >
-                        <ProductCard
-                          name={card.name}
-                          sku={card.sku}
-                          price={card.price}
-                          category={card.category}
-                          amountInStock={card.amountInStock}
-                          manufacturer={card.manufacturer.name}
-                        />
-                      </li>
-                    );
-                  })}
+                  data.product.products.map((card, index) =>
+                    searchConditions(card, index)
+                  )}
               </ul>
 
               <div className="sticky bottom-0 left-0 bg-gray-100 flex items-center gap-2 py-2 pl-4 text-sm">
