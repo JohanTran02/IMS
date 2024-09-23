@@ -1,13 +1,18 @@
-import { gql, useLazyQuery } from "@apollo/client";
+import { gql, useLazyQuery, TypedDocumentNode } from "@apollo/client";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Select from "react-select";
 import { RootState } from "../redux/store";
 import { IProduct } from "../types";
 import ProductCard from "./ProductCard";
 
-const GET_PRODUCTS = gql`
+type ProductData = {
+  product: {
+    products: IProduct[];
+  };
+};
+
+const GET_PRODUCTS: TypedDocumentNode<ProductData, number> = gql`
   query RootQuery($limit: Int) {
     product {
       products(limit: $limit) {
@@ -48,9 +53,7 @@ export function Products() {
     { value: 10, label: "10" },
   ];
 
-  const [getProducts, { data, error, loading }] = useLazyQuery<{
-    product: { products: IProduct[] };
-  }>(GET_PRODUCTS, {
+  const [getProducts, { data, error, loading }] = useLazyQuery(GET_PRODUCTS, {
     variables: { limit: rows },
   });
 
@@ -60,6 +63,22 @@ export function Products() {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error</div>;
+
+  const validRowValues = (value: number) => {
+    if (value === 10 || value === 25 || value === 50 || value === 100)
+      return dispatch({
+        type: "products/setRowsPerPage",
+        payload: value,
+      });
+  };
+
+  const validPageValues = (value: number) => {
+    if (value >= 1 && value <= 10)
+      return dispatch({
+        type: "products/setCurrentPage",
+        payload: value,
+      });
+  };
 
   return (
     <div className="flex h-full gap-2 flex-col">
@@ -116,38 +135,46 @@ export function Products() {
                   })}
               </ul>
 
-              <div className=" bg-gray-100 flex items-center gap-2 py-2 pl-4 text-sm">
-                Page{" "}
-                <Select
-                  name="page"
-                  options={pageOptions}
-                  defaultInputValue={String(page)}
-                  //   isSearchable={false}
+              <div className="sticky bottom-0 left-0 bg-gray-100 flex items-center gap-2 py-2 pl-4 text-sm">
+                <label>Page</label>
+                <input
+                  list="page"
+                  placeholder={String(page)}
+                  type="text"
+                  className="w-14 placeholder:text-black pl-1"
                   onChange={(e) => {
-                    dispatch({
-                      type: "products/setCurrentPage",
-                      payload: e?.value,
-                    });
+                    const value = e.target.value;
+                    if (isNaN(Number(value))) return;
+                    validPageValues(Number(value));
                   }}
-                />{" "}
+                />
+                <datalist id="page">
+                  {pageOptions.map((option) => (
+                    <option key={option.value} value={option.label} />
+                  ))}
+                </datalist>
                 -
                 <div
                   className="flex gap-2 items-center"
                   onSubmit={(e) => e.preventDefault()}
                 >
                   <label className="">Rows per page</label>
-                  <Select
-                    name="row-amount"
-                    options={rowOptions}
-                    defaultInputValue={String(rows)}
+                  <input
+                    list="rows-page"
+                    placeholder={String(rows)}
+                    type="text"
+                    className="w-16 placeholder:text-black pl-1"
                     onChange={(e) => {
-                      console.log("Row amount changed to " + e?.value);
-                      dispatch({
-                        type: "products/setRowsPerPage",
-                        payload: e?.value,
-                      });
+                      const value = e.target.value;
+                      if (isNaN(Number(value))) return;
+                      validRowValues(Number(value));
                     }}
                   />
+                  <datalist id="rows-page">
+                    {rowOptions.map((option) => {
+                      return <option key={option.value} value={option.label} />;
+                    })}
+                  </datalist>
                 </div>
                 <button
                   className="bg-blue-100 text p-2 rounded hover:bg-blue-200"
