@@ -1,6 +1,6 @@
 import { gql, useLazyQuery, TypedDocumentNode } from "@apollo/client";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { IProduct } from "../types";
@@ -18,7 +18,8 @@ type ProductData = {
 
 type ProductVars = {
   input: {
-    limit: number
+    limit: number,
+    page: number
   }
 }
 
@@ -38,14 +39,16 @@ const GET_PRODUCTS: TypedDocumentNode<ProductData, ProductVars> = gql`
         }
         totalCount
       }
+      totalCount
     }
   }
 `;
 
 export function Products() {
-  const navigate = useNavigate();
+  const [input, setInput] = useState<string>("");
   const { page, rows } = useSelector((state: RootState) => state.products);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const rowOptions = [
     { value: 10, label: "10" },
@@ -68,7 +71,12 @@ export function Products() {
   ];
 
   const [getProducts, { data, error, loading }] = useLazyQuery(GET_PRODUCTS, {
-    variables: { input: { limit: rows } },
+    variables: {
+      input: {
+        limit: rows,
+        page: page,
+      },
+    },
   });
 
   const products = data?.product.products.products || [] as IProduct[];
@@ -77,7 +85,14 @@ export function Products() {
   console.log(totalCount)
 
   useEffect(() => {
-    getProducts({ variables: { input: { limit: rows } } });
+    getProducts({
+      variables: {
+        input: {
+          limit: rows,
+          page: page,
+        },
+      },
+    });
   }, []);
 
   if (loading) return <div>Loading...</div>;
@@ -99,6 +114,38 @@ export function Products() {
       });
   };
 
+  const contentInRow = (card: IProduct) => {
+    return (
+      <li
+        key={card.sku}
+        className="group flex-none flex justify-between items-center h-12 border-b border-gray-200 cursor-pointer"
+        onClick={() => navigate(`/products/${card.sku}`)}
+      >
+        <ProductCard
+          name={card.name}
+          sku={card.sku}
+          price={card.price}
+          category={card.category}
+          amountInStock={card.amountInStock}
+          manufacturer={card.manufacturer.name}
+        />
+      </li>
+    );
+  };
+
+  const searchConditions = (card: IProduct) => {
+    if (card.name.toLocaleLowerCase().includes(input.toLowerCase()))
+      return contentInRow(card);
+    if (card.category.toLocaleLowerCase().includes(input.toLowerCase()))
+      return contentInRow(card);
+    if (
+      card.manufacturer.name.toLocaleLowerCase().includes(input.toLowerCase())
+    )
+      return contentInRow(card);
+
+    return null;
+  };
+
   return (
     <div className="flex h-full gap-2 flex-col">
       <div className="flex flex-1 gap-4 overflow-hidden">
@@ -108,13 +155,20 @@ export function Products() {
               <h1 className="font-semibold text-3xl px-8">Manage Products</h1>
             </div>
 
-            <div className="flex items-center border border-gray-300 w-[40%] rounded-md h-[42px] mt-4 mx-8 px-2">
-              <MagnifyingGlassIcon className="size-4" />
-              <input
-                type="text"
-                placeholder="Search products"
-                className="flex-1 h-full pl-2 outline-none"
-              />
+            <div className="flex justify-between items-end px-11">
+              <div className="flex items-center border border-gray-300 w-[40%] rounded-md h-[42px] mt-4 px-2">
+                <MagnifyingGlassIcon className="size-4" />
+                <input
+                  type="text"
+                  placeholder="Search products"
+                  className="flex-1 h-full pl-2 outline-none"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                />
+              </div>
+              <button className="font-semibold w-[120px] h-[40px] border rounded-lg bg-[#e0e0e0] hover:bg-green-400 transition-all">
+                Add product
+              </button>
             </div>
           </div>
 
@@ -201,7 +255,9 @@ export function Products() {
                 <button
                   className="bg-blue-100 text p-2 rounded hover:bg-blue-200"
                   onClick={() => {
-                    getProducts({ variables: { input: { limit: rows } } });
+                    getProducts({
+                      variables: { input: { limit: rows, page: page } },
+                    });
                   }}
                 >
                   update
