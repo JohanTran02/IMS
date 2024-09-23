@@ -20,7 +20,6 @@ function generateData(): IProduct[] {
 
 function createRandomProduct(): IProduct {
     return {
-        // _id: faker.database.mongodbObjectId(),
         name: faker.commerce.product(),
         sku: faker.commerce.isbn(),
         description: faker.commerce.productDescription(),
@@ -33,7 +32,6 @@ function createRandomProduct(): IProduct {
 
 function createRandomManufacturer(): IManufacturer {
     return {
-        _id: faker.database.mongodbObjectId(),
         name: faker.company.name(),
         description: faker.company.catchPhrase(),
         country: faker.location.country(),
@@ -49,16 +47,14 @@ function createRandomManufacturer(): IManufacturer {
 
 const fakeData = generateData()
 
+//Ta bort testdata
+await Product.deleteMany({}).then(() => {
+    console.log("Succesfully removed all products");
+}).catch((err) => console.log(err));
+
 //Generera testdata
 await Product.insertMany(fakeData).then(() => {
     console.log("Succesfully saved products");
     mongoose.connection.close();
     process.exit(0);
 }).catch((err) => console.log(err));
-
-//Ta bort testdata
-// await Product.deleteMany({}).then(() => {
-//     console.log("Succesfully removed all products");
-//     mongoose.connection.close();
-//     process.exit(0);
-// }).catch((err) => console.log(err));

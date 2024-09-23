@@ -3,9 +3,7 @@ import { GraphQLObjectType, GraphQLSchema } from 'graphql';
 import { createHandler } from "graphql-http/lib/use/express";
 import { connectToDB } from "./connect";
 import cors from "cors"
-import { ruruHTML } from "ruru/server"
-// import { contactQuery } from "./resources/contact/queries"
-import { manufacturerQuery } from "./resources/manufacturer/queries"
+// import { ruruHTML } from "ruru/server"
 import { productQuery } from "./resources/product/queries"
 import { productMutation } from './resources/product/mutation';
 import { ApolloServer } from "@apollo/server"
@@ -22,8 +20,6 @@ const RootQuery = new GraphQLObjectType({
     name: "RootQuery",
     description: "Root query for all READ endpoints",
     fields: {
-        // contact: { type: contactQuery, resolve: () => ({}) },
-        manufacturer: { type: manufacturerQuery, resolve: () => ({}) },
         product: { type: productQuery, resolve: () => ({}) }
     },
 });
@@ -47,7 +43,7 @@ const server = new ApolloServer({
 });
 
 const { url } = await startStandaloneServer(server, {
-    listen: { port: 4000 },
+    listen: { port: port },
 });
 
 

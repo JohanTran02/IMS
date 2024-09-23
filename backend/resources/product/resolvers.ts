@@ -103,14 +103,12 @@ export const getManufacturers = async (): Promise<IManufacturer[]> => {
 
 export const addProduct = async (input) => {
     const newProduct = {
-        _id: faker.database.mongodbObjectId(),
         name: input.name,
         sku: input.sku || faker.commerce.isbn(),
         description: input.description || "",
         price: input.price,
         category: input.category || "",
         manufacturer: {
-            _id: faker.database.mongodbObjectId(),
             name: input.manufacturer.name,
             description: input.manufacturer.description || "",
             country: input.manufacturer.country,
