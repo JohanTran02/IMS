@@ -18,10 +18,10 @@ export const productQuery = new GraphQLObjectType({
         product: {
             type: ProductType,
             args: {
-                _id: { type: GraphQLID },
+                sku: { type: GraphQLString },
             },
-            resolve: async (_, { _id }) => {
-                return getProduct(_id)
+            resolve: async (_, { sku }) => {
+                return getProduct(sku)
             }
         },
         totalStockValue: {

@@ -1,15 +1,22 @@
 import { gql, TypedDocumentNode, useQuery } from "@apollo/client";
 import { useState } from "react";
 import { IProduct } from "../../../backend/resources/product/types";
+import { useParams } from "react-router";
 
-interface IProductVars {
-    limit: number
+interface IProductData {
+    product: {
+        product: IProduct
+    }
 }
 
-const GET_PRODUCTS: TypedDocumentNode<IProduct[], IProductVars> = gql`
-    query RootQuery($limit : Int) {  
+interface IProductVars {
+    sku: string | undefined
+}
+
+const GET_PRODUCT: TypedDocumentNode<IProductData, IProductVars> = gql`
+    query RootQuery($sku : String) {  
         product{
-            products(limit: $limit){
+            product(sku: $sku){
             name
             sku
             description
@@ -21,6 +28,7 @@ const GET_PRODUCTS: TypedDocumentNode<IProduct[], IProductVars> = gql`
                     description
                     website
                     address
+                    country
                     contact{
                         name
                         phone
@@ -33,15 +41,16 @@ const GET_PRODUCTS: TypedDocumentNode<IProduct[], IProductVars> = gql`
 `;
 
 export function ProductDetails() {
+    const { sku } = useParams();
     const [activeTab, setActiveTab] = useState<"product" | "manufacturer">("product");
-    const { error, loading, data = [] } = useQuery(GET_PRODUCTS, {
-        variables: { limit: 10 }
+    const { error, loading, data } = useQuery<IProductData, IProductVars>(GET_PRODUCT, {
+        variables: { sku: sku }
     })
+
+    const product = data?.product?.product || {} as IProduct;
 
     if (loading) return null;
     if (error) return `Error! ${error.message}`;
-
-    console.log(data)
 
     return (
         <>
@@ -53,28 +62,28 @@ export function ProductDetails() {
                     </div>
                     {
                         activeTab === "product" ? <>
-                            <input type="text" disabled value={`${data[0].name}`} className="h-12" />
-                            <input type="text" disabled value={`${data[0].category}`} className="h-12" />
+                            <input type="text" disabled value={`${product.name}`} className="h-12" />
+                            <input type="text" disabled value={`${product.category}`} className="h-12" />
                             <div className="flex gap-4">
-                                <input type="text" disabled value={`${data[0].price}`} className="h-12 flex-1 w-0" />
-                                <input type="text" disabled value={`${data[0].amountInStock}`} className="h-12 flex-1 w-0" />
+                                <input type="text" disabled value={`${product.price}`} className="h-12 flex-1 w-0" />
+                                <input type="text" disabled value={`${product.amountInStock}`} className="h-12 flex-1 w-0" />
                             </div>
-                            <textarea disabled value={`${data[0].description}`} className="resize-none h-[200px]" />
+                            <textarea disabled value={`${product.description}`} className="resize-none h-[200px]" />
                         </> :
                             <>
-                                <input type="text" disabled value={"Manufacturer name"} className="h-12" />
-                                <input type="text" disabled value={"Manufacturer website"} className="h-12" />
+                                <input type="text" disabled value={`${product.manufacturer.name}`} className="h-12" />
+                                <input type="text" disabled value={`${product.manufacturer.website}`} className="h-12" />
                                 <div className="flex flex-row gap-4">
-                                    <input type="text" disabled value={"Manufacturer address"} className="h-12 flex-1 w-0" />
-                                    <input type="text" disabled value={"Manufacturer country"} className="h-12 flex-1 w-0" />
+                                    <input type="text" disabled value={`${product.manufacturer.address}`} className="h-12 flex-1 w-0" />
+                                    <input type="text" disabled value={`${product.manufacturer.country}`} className="h-12 flex-1 w-0" />
                                 </div>
                                 <div className="flex gap-4">
-                                    <textarea disabled value={"Manufacturer description"} className="resize-none h-[200px] flex-1 w-0" />
+                                    <textarea disabled value={`${product.manufacturer.description}`} className="resize-none h-[200px] flex-1 w-0" />
                                     <div className="flex flex-col flex-1 w-0">
                                         <h1 className="text-lg font-bold">Contact</h1>
-                                        <input type="text" disabled value={"Manufacturer name"} className="h-full" />
-                                        <input type="text" disabled value={"Manufacturer email"} className="h-full" />
-                                        <input type="text" disabled value={"Manufacturer phone number"} className="h-full" />
+                                        <input type="text" disabled value={`${product.manufacturer.contact.name}`} className="h-full" />
+                                        <input type="text" disabled value={`${product.manufacturer.contact.email}`} className="h-full" />
+                                        <input type="text" disabled value={`${product.manufacturer.contact.phone}`} className="h-full" />
                                     </div>
                                 </div>
                             </>

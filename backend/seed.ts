@@ -1,7 +1,7 @@
+import mongoose from "mongoose";
 import { faker } from "@faker-js/faker";
 import { Product } from "./models/models";
 import { connectToDB } from "./connect";
-import mongoose from "mongoose";
 import { IManufacturer } from "./resources/manufacturer/types";
 import { IProduct } from "./resources/product/types";
 
@@ -50,15 +50,15 @@ function createRandomManufacturer(): IManufacturer {
 const fakeData = generateData()
 
 //Generera testdata
-// await Product.insertMany(fakeData).then(() => {
-//     console.log("Succesfully saved products");
-//     mongoose.connection.close();
-//     process.exit(0);
-// }).catch((err) => console.log(err));
-
-//Ta bort testdata
-await Product.deleteMany({}).then(() => {
-    console.log("Succesfully removed all products");
+await Product.insertMany(fakeData).then(() => {
+    console.log("Succesfully saved products");
     mongoose.connection.close();
     process.exit(0);
 }).catch((err) => console.log(err));
+
+//Ta bort testdata
+// await Product.deleteMany({}).then(() => {
+//     console.log("Succesfully removed all products");
+//     mongoose.connection.close();
+//     process.exit(0);
+// }).catch((err) => console.log(err));
