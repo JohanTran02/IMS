@@ -1,9 +1,19 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql, TypedDocumentNode, useQuery } from "@apollo/client";
 import { useState } from "react";
+import { IProduct } from "../../../backend/resources/product/types";
 import { useParams } from "react-router";
-import { IProduct } from "../types";
 
-const GET_PRODUCT = gql`
+interface IProductData {
+    product: {
+        product: IProduct
+    }
+}
+
+interface IProductVars {
+    sku: string | undefined
+}
+
+const GET_PRODUCT: TypedDocumentNode<IProductData, IProductVars> = gql`
     query RootQuery($sku : String) {  
         product{
             product(sku: $sku){
@@ -33,9 +43,11 @@ const GET_PRODUCT = gql`
 export function ProductDetails() {
     const { sku } = useParams();
     const [activeTab, setActiveTab] = useState<"product" | "manufacturer">("product");
-    const { error, loading, data: { product: { product } = { product: {} as IProduct } } = {} } = useQuery<{ product: { product: IProduct } }>(GET_PRODUCT, {
+    const { error, loading, data } = useQuery<IProductData, IProductVars>(GET_PRODUCT, {
         variables: { sku: sku }
     })
+
+    const product = data?.product?.product || {} as IProduct;
 
     if (loading) return null;
     if (error) return `Error! ${error.message}`;
