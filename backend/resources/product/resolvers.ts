@@ -6,8 +6,9 @@ import { faker } from "@faker-js/faker";
 export const getProducts = async (input: IGetProductFilterInput) => {
     if (!input) return await Product.find().limit(0);
 
-    const { amountInStock, price, category, manufacturers, limit } = input;
+    const { amountInStock, price, category, manufacturers, limit, page } = input;
     const productLimit = limit ?? 0;
+    const pageOffset = page ?? 1;
 
     const query: ProductQuery = {};
 
@@ -27,9 +28,7 @@ export const getProducts = async (input: IGetProductFilterInput) => {
         query['manufacturer.name'] = { $in: setFilteredCategories(manufacturers.value) };
     }
 
-    return Object.keys(query).length > 0
-        ? await Product.find(query).limit(productLimit)
-        : await Product.find().limit(productLimit);
+    return await Product.find(query).limit(productLimit).skip(pageOffset * productLimit);
 }
 
 function setFilteredCategories(filters: string[]): RegExp[] {
@@ -48,9 +47,12 @@ function setNumberRange(numberRange: NumberRangeFilter): NumberRangeQuery {
         lte: "$lte",
     };
 
+    //Ex. [operatorMapping[gt]] = $gt. 
     for (const [operator, value] of Object.entries(numberRange)) {
         if (value !== undefined && !isNaN(Number(value))) {
+            // Ex. query[operatorMapping[operator]] = ($gt = value)
             query[operatorMapping[operator]] = Number(value);
+            console.log(operator, operatorMapping, operatorMapping[operator])
         }
     }
 

@@ -29,7 +29,8 @@ type IGetProductFilterInput = Partial<{
     amountInStock: NumberRangeFilter,
     manufacturers: { value: string[] },
     category: { value: string[] },
-    limit: number
+    limit: number,
+    page: number,
 }>
 
 type ProductQuery = Partial<{
@@ -38,6 +39,5 @@ type ProductQuery = Partial<{
     category: { $in: RegExp[] };
     'manufacturer.name': { $in: RegExp[] };
 }>
-
 
 export { IProduct, NumberRangeFilter, NumberRangeQuery, IGetProductFilterInput, ProductQuery }

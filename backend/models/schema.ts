@@ -121,7 +121,8 @@ const GetProductsFilterInput = new GraphQLInputObjectType({
         amountInStock: { type: NumberRangeFilterInput },
         manufacturers: { type: StringFilterInput },
         category: { type: StringFilterInput },
-        limit: { type: GraphQLInt }
+        limit: { type: GraphQLInt },
+        page: { type: GraphQLInt }
     }
 })
 
