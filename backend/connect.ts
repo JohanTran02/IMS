@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
-import dotenv from "dotenv"
-dotenv.config({ path: '../.env' })
+import "dotenv/config"
 
 const db = mongoose.connection;
 
