@@ -8,7 +8,7 @@ export const getProducts = async (input: IGetProductFilterInput) => {
 
     const { amountInStock, price, category, manufacturers, limit, page } = input;
     const productLimit = limit ?? 0;
-    const pageOffset = page ?? 1;
+    const pageOffset = (page === 0 || !page) ? 1 : page;
 
     const query: ProductQuery = {};
 
@@ -28,7 +28,13 @@ export const getProducts = async (input: IGetProductFilterInput) => {
         query['manufacturer.name'] = { $in: setFilteredCategories(manufacturers.value) };
     }
 
-    return await Product.find(query).limit(productLimit).skip(pageOffset * productLimit);
+    const products = await Product.find(query).limit(productLimit).skip(pageOffset * productLimit);
+    const totalCount = Math.ceil(await Product.find().countDocuments() / productLimit);
+
+    return {
+        totalCount,
+        products
+    }
 }
 
 function setFilteredCategories(filters: string[]): RegExp[] {

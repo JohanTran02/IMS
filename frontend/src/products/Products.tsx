@@ -9,7 +9,10 @@ import { useNavigate } from "react-router";
 
 type ProductData = {
   product: {
-    products: IProduct[];
+    products: {
+      products: IProduct[],
+      totalCount: number
+    }
   };
 };
 
@@ -20,17 +23,20 @@ type ProductVars = {
 }
 
 const GET_PRODUCTS: TypedDocumentNode<ProductData, ProductVars> = gql`
-  query RootQuery($input: GetProductsFilterInput) {
+  query Product($input: GetProductsFilterInput) {
     product {
       products(input: $input) {
-        name
-        sku
-        price
-        category
-        amountInStock
-        manufacturer {
+        products {
           name
+          sku
+          price
+          category
+          manufacturer {
+            name
+          }
+          amountInStock
         }
+        totalCount
       }
     }
   }
@@ -64,6 +70,11 @@ export function Products() {
   const [getProducts, { data, error, loading }] = useLazyQuery(GET_PRODUCTS, {
     variables: { input: { limit: rows } },
   });
+
+  const products = data?.product.products.products || [] as IProduct[];
+  const totalCount = data?.product.products.totalCount;
+  console.log(products)
+  console.log(totalCount)
 
   useEffect(() => {
     getProducts({ variables: { input: { limit: rows } } });
@@ -123,8 +134,8 @@ export function Products() {
               </div>
 
               <ul className="overflow-y-auto">
-                {data &&
-                  data.product.products.map((card) => {
+                {products &&
+                  products.map((card) => {
                     return (
                       <li
                         key={card.sku}
