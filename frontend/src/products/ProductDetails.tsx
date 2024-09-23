@@ -43,6 +43,7 @@ const GET_PRODUCT: TypedDocumentNode<IProductData, IProductVars> = gql`
 export function ProductDetails() {
     const { sku } = useParams();
     const [activeTab, setActiveTab] = useState<"product" | "manufacturer">("product");
+
     const { error, loading, data } = useQuery<IProductData, IProductVars>(GET_PRODUCT, {
         variables: { sku: sku }
     })
@@ -62,16 +63,16 @@ export function ProductDetails() {
                     </div>
                     {
                         activeTab === "product" ? <>
-                            <input type="text" disabled value={`${product.name}`} className="h-12" />
-                            <input type="text" disabled value={`${product.category}`} className="h-12" />
+                            <input type="text" disabled={!isinEdit} value={`${product.name}`} className="h-12" />
+                            <input type="text" disabled={!isinEdit} value={`${product.category}`} className="h-12" />
                             <div className="flex gap-4">
-                                <input type="text" disabled value={`${product.price}`} className="h-12 flex-1 w-0" />
-                                <input type="text" disabled value={`${product.amountInStock}`} className="h-12 flex-1 w-0" />
+                                <input type="text" disabled={!isinEdit} value={`${product.price}`} className="h-12 flex-1 w-0" />
+                                <input type="text" disabled={!isinEdit} value={`${product.amountInStock}`} className="h-12 flex-1 w-0" />
                             </div>
-                            <textarea disabled value={`${product.description}`} className="resize-none h-[200px]" />
+                            <textarea disabled={!isinEdit} value={`${product.description}`} className="resize-none h-[200px]" />
                         </> :
                             <>
-                                <input type="text" disabled value={`${product.manufacturer.name}`} className="h-12" />
+                                <input type="text" disabled={!isinEdit} value={`${product.manufacturer.name}`} className="h-12" />
                                 <input type="text" disabled value={`${product.manufacturer.website}`} className="h-12" />
                                 <div className="flex flex-row gap-4">
                                     <input type="text" disabled value={`${product.manufacturer.address}`} className="h-12 flex-1 w-0" />
@@ -88,6 +89,8 @@ export function ProductDetails() {
                                 </div>
                             </>
                     }
+
+                  
                 </div>
                 <div className="bg-lime-300 flex flex-col flex-1 w-0 gap-4">
                     <div className="bg-cyan-300 h-[150px]">Total stock value diagram</div>
