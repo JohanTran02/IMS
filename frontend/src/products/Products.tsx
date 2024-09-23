@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { IProduct } from "../types";
 import ProductCard from "./ProductCard";
+import { useNavigate } from "react-router";
 
 type ProductData = {
   product: {
@@ -30,6 +31,7 @@ const GET_PRODUCTS: TypedDocumentNode<ProductData, number> = gql`
 `;
 
 export function Products() {
+  const navigate = useNavigate();
   const { page, rows } = useSelector((state: RootState) => state.products);
   const dispatch = useDispatch();
 
@@ -116,12 +118,15 @@ export function Products() {
 
               <ul className="overflow-y-auto">
                 {data &&
-                  data.product.products.map((card, index) => {
+                  data.product.products.map((card) => {
                     return (
                       <li
-                        key={index}
+                        key={card.sku}
+                        title="Show product details"
                         className="flex-none flex justify-between items-center gap-1 h-12 border-b border-gray-200"
-                      >
+                        onClick={() => {
+                          navigate(`/products/${card.sku}`)
+                        }}>
                         <ProductCard
                           name={card.name}
                           sku={card.sku}
@@ -192,6 +197,6 @@ export function Products() {
         <div className="bg-zinc-400 p-3">Settings</div>
       </div>
       <div className="bg-yellow-400"> asdfasd fasdfasd fasdftest</div>
-    </div>
+    </div >
   );
 }
