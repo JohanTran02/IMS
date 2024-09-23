@@ -7,8 +7,8 @@ export const getProducts = async (limit) => {
     return await Product.find({}).limit(limit);
 }
 
-export const getProduct = async (_id: string) => {
-    return await Product.findById(_id);
+export const getProduct = async (sku: string) => {
+    return await Product.findOne({ sku: sku });
 }
 
 export const getTotalStockValue = async () => {

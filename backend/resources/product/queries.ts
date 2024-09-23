@@ -1,4 +1,4 @@
-import { GraphQLID, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
 import { ManufacturerType, ProductType, totalStockValueType } from "../../models/schema";
 import { getCriticalStockProducts, getlowStockProducts, getProduct, getProducts, getTotalStockValue, getTotalStockValueByManufacturer, getManufacturers } from "./resolvers";
 import { IManufacturer } from "../manufacturer/types";
@@ -18,10 +18,10 @@ export const productQuery = new GraphQLObjectType({
         product: {
             type: ProductType,
             args: {
-                _id: { type: GraphQLID },
+                sku: { type: GraphQLString },
             },
-            resolve: async (_, { _id }) => {
-                return getProduct(_id)
+            resolve: async (_, { sku }) => {
+                return getProduct(sku)
             }
         },
         totalStockValue: {
