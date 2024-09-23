@@ -34,12 +34,11 @@ const GET_PRODUCTS: TypedDocumentNode<ProductData, ProductVars> = gql`
           category
           manufacturer {
             name
-          }
-          amountInStock
+            }
+            amountInStock
         }
         totalCount
       }
-      totalCount
     }
   }
 `;
@@ -189,26 +188,7 @@ export function Products() {
 
               <ul className="overflow-y-auto">
                 {products &&
-                  products.map((card) => {
-                    return (
-                      <li
-                        key={card.sku}
-                        title="Show product details"
-                        className="flex-none flex justify-between items-center gap-1 h-12 border-b border-gray-200"
-                        onClick={() => {
-                          navigate(`/products/${card.sku}`)
-                        }}>
-                        <ProductCard
-                          name={card.name}
-                          sku={card.sku}
-                          price={card.price}
-                          category={card.category}
-                          amountInStock={card.amountInStock}
-                          manufacturer={card.manufacturer.name}
-                        />
-                      </li>
-                    );
-                  })}
+                  products.map((card) => searchConditions(card))}
               </ul>
 
               <div className="sticky bottom-0 left-0 bg-gray-100 flex items-center gap-2 py-2 pl-4 text-sm">
