@@ -1,4 +1,4 @@
-import { GraphQLID, GraphQLInputObjectType, GraphQLInt, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLID, GraphQLInputObjectType, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString, graphqlSync } from "graphql";
 
 //REST
 export interface UserREST {
@@ -96,4 +96,34 @@ const UpdateProductInput = new GraphQLInputObjectType({
         amountInStock: { type: GraphQLInt }
     }
 });
-export { CreateProductInput, UpdateProductInput, totalStockValueType, ManufacturerType, ProductType };
+
+const NumberRangeFilterInput = new GraphQLInputObjectType({
+    name: "NumberRangeFilterInput",
+    fields: {
+        gt: { type: GraphQLInt },
+        gte: { type: GraphQLInt },
+        lt: { type: GraphQLInt },
+        lte: { type: GraphQLInt }
+    }
+})
+
+const StringFilterInput = new GraphQLInputObjectType({
+    name: "StringFilterInput",
+    fields: {
+        value: { type: new GraphQLList(GraphQLString) }
+    }
+});
+
+const GetProductsFilterInput = new GraphQLInputObjectType({
+    name: "GetProductsFilterInput",
+    fields: {
+        price: { type: NumberRangeFilterInput },
+        amountInStock: { type: NumberRangeFilterInput },
+        manufacturers: { type: StringFilterInput },
+        category: { type: StringFilterInput },
+        limit: { type: GraphQLInt },
+        page: { type: GraphQLInt }
+    }
+})
+
+export { CreateProductInput, UpdateProductInput, totalStockValueType, ManufacturerType, ProductType, GetProductsFilterInput };

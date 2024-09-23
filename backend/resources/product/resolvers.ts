@@ -1,14 +1,67 @@
 import { Product } from "../../models/models"
 import { IManufacturer } from "../manufacturer/types";
-import { IProduct } from "./types";
+import { IProduct, IGetProductFilterInput, ProductQuery, NumberRangeFilter, NumberRangeQuery } from "./types";
 import { faker } from "@faker-js/faker";
 
-export const getProducts = async (limit) => {
-    return await Product.find({}).limit(limit);
+export const getProducts = async (input: IGetProductFilterInput) => {
+    if (!input) return await Product.find().limit(0);
+
+    const { amountInStock, price, category, manufacturers, limit, page } = input;
+    const productLimit = limit ?? 0;
+    const pageOffset = page ?? 1;
+
+    const query: ProductQuery = {};
+
+    if (amountInStock && Object.keys(amountInStock).length > 0) {
+        query.amountInStock = setNumberRange(amountInStock)
+    }
+
+    if (price && Object.keys(price).length > 0) {
+        query.price = setNumberRange(price)
+    }
+
+    if (category?.value && category?.value.length > 0) {
+        query.category = { $in: setFilteredCategories(category.value) };
+    }
+
+    if (manufacturers?.value && manufacturers?.value.length > 0) {
+        query['manufacturer.name'] = { $in: setFilteredCategories(manufacturers.value) };
+    }
+
+    return await Product.find(query).limit(productLimit).skip(pageOffset * productLimit);
 }
 
-export const getProduct = async (_id: string) => {
-    return await Product.findById(_id);
+function setFilteredCategories(filters: string[]): RegExp[] {
+    return filters
+        .filter(categoryItem => categoryItem.trim() !== "")
+        .map(categoryItem => new RegExp(`${categoryItem}`, "i"))
+}
+
+function setNumberRange(numberRange: NumberRangeFilter): NumberRangeQuery {
+    const query: NumberRangeQuery = {}
+
+    const operatorMapping: Record<string, string> = {
+        gt: "$gt",
+        gte: "$gte",
+        lt: "$lt",
+        lte: "$lte",
+    };
+
+    //Ex. [operatorMapping[gt]] = $gt. 
+    for (const [operator, value] of Object.entries(numberRange)) {
+        if (value !== undefined && !isNaN(Number(value))) {
+            // Ex. query[operatorMapping[operator]] = ($gt = value)
+            query[operatorMapping[operator]] = Number(value);
+            console.log(operator, operatorMapping, operatorMapping[operator])
+        }
+    }
+
+    return query;
+}
+
+
+export const getProduct = async (sku: string) => {
+    return await Product.findOne({ sku: sku });
 }
 
 export const getTotalStockValue = async () => {

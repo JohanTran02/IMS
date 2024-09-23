@@ -5,11 +5,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { IProduct, ProductData } from "../types";
 import ProductCard from "./ProductCard";
+import { useNavigate } from "react-router";
 
-const GET_PRODUCTS: TypedDocumentNode<ProductData, number> = gql`
-  query RootQuery($limit: Int) {
+type ProductVars = {
+  input: {
+    limit: number;
+  };
+};
+
+const GET_PRODUCTS: TypedDocumentNode<ProductData, ProductVars> = gql`
+  query RootQuery($input: GetProductsFilterInput) {
     product {
-      products(limit: $limit) {
+      products(input: $input) {
         name
         sku
         price
@@ -27,6 +34,7 @@ export function Products() {
   const [input, setInput] = useState<string>("");
   const { page, rows } = useSelector((state: RootState) => state.products);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const rowOptions = [
     { value: 10, label: "10" },
@@ -49,11 +57,11 @@ export function Products() {
   ];
 
   const [getProducts, { data, error, loading }] = useLazyQuery(GET_PRODUCTS, {
-    variables: { limit: rows },
+    variables: { input: { limit: rows } },
   });
 
   useEffect(() => {
-    getProducts({ variables: { limit: rows } });
+    getProducts({ variables: { input: { limit: rows } } });
   }, []);
 
   if (loading) return <div>Loading...</div>;
@@ -193,7 +201,7 @@ export function Products() {
                 <button
                   className="bg-blue-100 text p-2 rounded hover:bg-blue-200"
                   onClick={() => {
-                    getProducts({ variables: { limit: rows } });
+                    getProducts({ variables: { input: { limit: rows } } });
                   }}
                 >
                   update

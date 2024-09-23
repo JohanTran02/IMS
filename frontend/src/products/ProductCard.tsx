@@ -2,13 +2,13 @@
 type Prop = {
   name: string;
   sku: string;
-  price: number; 
+  price: number;
   category: string;
   amountInStock: number;
-  manufacturer: string; 
+  manufacturer: string;
 }
 
-const ProductCard = ({name, sku, price, category, amountInStock, manufacturer}: Prop) => {
+const ProductCard = ({ name, sku, price, category, amountInStock, manufacturer }: Prop) => {
   return (
     <>
       <p className="flex-[1] text-[13px] border-l border-l-gray-200 border-r border-r-gray-200 h-full grid place-items-center">
@@ -18,7 +18,7 @@ const ProductCard = ({name, sku, price, category, amountInStock, manufacturer}: 
       <p className="flex-1 text-[13px] border-r border-r-gray-200 h-full grid place-items-center">
         <span className="">{category}</span>
       </p>
-      
+
       <p className="flex-1 text-[13px] border-r border-r-gray-200 h-full grid place-items-center">
         <span className="">{price}</span>
       </p>

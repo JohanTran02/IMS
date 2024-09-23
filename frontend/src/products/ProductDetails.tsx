@@ -1,11 +1,22 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql, TypedDocumentNode, useQuery } from "@apollo/client";
 import { useState } from "react";
 import { IProduct } from "../../../backend/resources/product/types";
+import { useParams } from "react-router";
 
-const GET_PRODUCTS = gql`
-    query RootQuery($limit : Int) {  
+interface IProductData {
+    product: {
+        product: IProduct
+    }
+}
+
+interface IProductVars {
+    sku: string | undefined
+}
+
+const GET_PRODUCT: TypedDocumentNode<IProductData, IProductVars> = gql`
+    query RootQuery($sku : String) {  
         product{
-            products(limit: $limit){
+            product(sku: $sku){
             name
             sku
             description
@@ -17,6 +28,7 @@ const GET_PRODUCTS = gql`
                     description
                     website
                     address
+                    country
                     contact{
                         name
                         phone
@@ -29,16 +41,16 @@ const GET_PRODUCTS = gql`
 `;
 
 export function ProductDetails() {
+    const { sku } = useParams();
     const [activeTab, setActiveTab] = useState<"product" | "manufacturer">("product");
-    const { error, loading, data: { product: { products } = { products: [] } } = {} } = useQuery<{ product: { products: IProduct[] } }>(GET_PRODUCTS, {
-        variables: { limit: 10 }
+    const { error, loading, data } = useQuery<IProductData, IProductVars>(GET_PRODUCT, {
+        variables: { sku: sku }
     })
+
+    const product = data?.product?.product || {} as IProduct;
 
     if (loading) return null;
     if (error) return `Error! ${error.message}`;
-
-    console.log(products);
-    const product = products[2];
 
     return (
         <>
@@ -59,19 +71,19 @@ export function ProductDetails() {
                             <textarea disabled value={`${product.description}`} className="resize-none h-[200px]" />
                         </> :
                             <>
-                                <input type="text" disabled value={"Manufacturer name"} className="h-12" />
-                                <input type="text" disabled value={"Manufacturer website"} className="h-12" />
+                                <input type="text" disabled value={`${product.manufacturer.name}`} className="h-12" />
+                                <input type="text" disabled value={`${product.manufacturer.website}`} className="h-12" />
                                 <div className="flex flex-row gap-4">
-                                    <input type="text" disabled value={"Manufacturer address"} className="h-12 flex-1 w-0" />
-                                    <input type="text" disabled value={"Manufacturer country"} className="h-12 flex-1 w-0" />
+                                    <input type="text" disabled value={`${product.manufacturer.address}`} className="h-12 flex-1 w-0" />
+                                    <input type="text" disabled value={`${product.manufacturer.country}`} className="h-12 flex-1 w-0" />
                                 </div>
                                 <div className="flex gap-4">
-                                    <textarea disabled value={"Manufacturer description"} className="resize-none h-[200px] flex-1 w-0" />
+                                    <textarea disabled value={`${product.manufacturer.description}`} className="resize-none h-[200px] flex-1 w-0" />
                                     <div className="flex flex-col flex-1 w-0">
                                         <h1 className="text-lg font-bold">Contact</h1>
-                                        <input type="text" disabled value={"Manufacturer name"} className="h-full" />
-                                        <input type="text" disabled value={"Manufacturer email"} className="h-full" />
-                                        <input type="text" disabled value={"Manufacturer phone number"} className="h-full" />
+                                        <input type="text" disabled value={`${product.manufacturer.contact.name}`} className="h-full" />
+                                        <input type="text" disabled value={`${product.manufacturer.contact.email}`} className="h-full" />
+                                        <input type="text" disabled value={`${product.manufacturer.contact.phone}`} className="h-full" />
                                     </div>
                                 </div>
                             </>
