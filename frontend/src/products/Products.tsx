@@ -10,6 +10,7 @@ import { useNavigate } from "react-router";
 type ProductVars = {
   input: {
     limit: number;
+    page: number;
   };
 };
 
@@ -17,6 +18,7 @@ const GET_PRODUCTS: TypedDocumentNode<ProductData, ProductVars> = gql`
   query RootQuery($input: GetProductsFilterInput) {
     product {
       products(input: $input) {
+      products {
         name
         sku
         price
@@ -24,8 +26,9 @@ const GET_PRODUCTS: TypedDocumentNode<ProductData, ProductVars> = gql`
         amountInStock
         manufacturer {
           name
-        }
+        }  
       }
+      totalCount
     }
   }
 `;
@@ -57,11 +60,23 @@ export function Products() {
   ];
 
   const [getProducts, { data, error, loading }] = useLazyQuery(GET_PRODUCTS, {
-    variables: { input: { limit: rows } },
+    variables: {
+      input: {
+        limit: rows,
+        page: page,
+      },
+    },
   });
 
   useEffect(() => {
-    getProducts({ variables: { input: { limit: rows } } });
+    getProducts({
+      variables: {
+        input: {
+          limit: rows,
+          page: page,
+        },
+      },
+    });
   }, []);
 
   if (loading) return <div>Loading...</div>;
@@ -83,11 +98,12 @@ export function Products() {
       });
   };
 
-  const contentInRow = (card: IProduct, index: number) => {
+  const contentInRow = (card: IProduct) => {
     return (
       <li
-        key={index}
-        className="flex-none flex justify-between items-center gap-1 h-12 border-b border-gray-200"
+        key={card.sku}
+        className="group flex-none flex justify-between items-center h-12 border-b border-gray-200 cursor-pointer"
+        onClick={() => navigate(`/products/${card.sku}`)}
       >
         <ProductCard
           name={card.name}
@@ -101,15 +117,15 @@ export function Products() {
     );
   };
 
-  const searchConditions = (card: IProduct, index: number) => {
+  const searchConditions = (card: IProduct) => {
     if (card.name.toLocaleLowerCase().includes(input.toLowerCase()))
-      return contentInRow(card, index);
+      return contentInRow(card);
     if (card.category.toLocaleLowerCase().includes(input.toLowerCase()))
-      return contentInRow(card, index);
+      return contentInRow(card);
     if (
       card.manufacturer.name.toLocaleLowerCase().includes(input.toLowerCase())
     )
-      return contentInRow(card, index);
+      return contentInRow(card);
 
     return null;
   };
@@ -123,15 +139,20 @@ export function Products() {
               <h1 className="font-semibold text-3xl px-8">Manage Products</h1>
             </div>
 
-            <div className="flex items-center border border-gray-300 w-[40%] rounded-md h-[42px] mt-4 mx-8 px-2">
-              <MagnifyingGlassIcon className="size-4" />
-              <input
-                type="text"
-                placeholder="Search products"
-                className="flex-1 h-full pl-2 outline-none"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-              />
+            <div className="flex justify-between items-end px-11">
+              <div className="flex items-center border border-gray-300 w-[40%] rounded-md h-[42px] mt-4 px-2">
+                <MagnifyingGlassIcon className="size-4" />
+                <input
+                  type="text"
+                  placeholder="Search products"
+                  className="flex-1 h-full pl-2 outline-none"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                />
+              </div>
+              <button className="font-semibold w-[120px] h-[40px] border rounded-lg bg-[#e0e0e0] hover:bg-green-400 transition-all">
+                Add product
+              </button>
             </div>
           </div>
 
@@ -152,9 +173,7 @@ export function Products() {
 
               <ul className="overflow-y-auto">
                 {data &&
-                  data.product.products.map((card, index) =>
-                    searchConditions(card, index)
-                  )}
+                  data.product.products.map((card) => searchConditions(card))}
               </ul>
 
               <div className="sticky bottom-0 left-0 bg-gray-100 flex items-center gap-2 py-2 pl-4 text-sm">
@@ -201,7 +220,9 @@ export function Products() {
                 <button
                   className="bg-blue-100 text p-2 rounded hover:bg-blue-200"
                   onClick={() => {
-                    getProducts({ variables: { input: { limit: rows } } });
+                    getProducts({
+                      variables: { input: { limit: rows, page: page } },
+                    });
                   }}
                 >
                   update
