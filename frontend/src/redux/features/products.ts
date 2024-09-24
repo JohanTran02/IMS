@@ -6,7 +6,7 @@ type IntialState = {
 };
 
 const initialState: IntialState = {
-  rows: 25,
+  rows: 50,
   page: 1,
 };
 
