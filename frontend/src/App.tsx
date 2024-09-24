@@ -18,7 +18,7 @@ function App() {
                             <Route index element={<Products />} />
                             <Route element={<ProductLayout />}>
                                 <Route path=":sku" element={<ProductDetails />} />
-                                <Route path="edit" element={<ProductEdit />} />
+                                <Route path="edit/:sku" element={<ProductEdit />} />
                                 <Route path="add" element={<ProductAdd />} />
                             </Route>
                         </Route>
