@@ -1,20 +1,71 @@
 import { useForm } from "react-hook-form";
 
+import { gql, TypedDocumentNode, useQuery } from "@apollo/client";
+
+import { IProduct } from "../../../backend/resources/product/types";
+import { useParams } from "react-router";
+
+interface IProductData {
+  product: {
+    product: IProduct;
+  };
+}
+
+interface IProductVars {
+  sku: string | undefined;
+}
+
+const GET_PRODUCT: TypedDocumentNode<IProductData, IProductVars> = gql`
+  query RootQuery($sku: String) {
+    product {
+      product(sku: $sku) {
+        name
+        sku
+        description
+        price
+        category
+        amountInStock
+        manufacturer {
+          name
+          description
+          website
+          address
+          country
+          contact {
+            name
+            phone
+            email
+          }
+        }
+      }
+    }
+  }
+`;
+
 const Form = () => {
   const {
     register,
-    // handleSubmit,
     formState: { errors },
   } = useForm();
 
-  // const onSubmit = (data) => {
-  //   console.log(data);
-  // };
+   const { sku } = useParams();
+   
+
+   const { error, loading, data } = useQuery<IProductData, IProductVars>(
+     GET_PRODUCT,
+     {
+       variables: { sku: sku },
+     }
+   );
+
+   const product = data?.product?.product || ({} as IProduct);
+
+   if (loading) return null;
+   if (error) return `Error! ${error.message}`;
+
 
   return (
-    <form className="bg-slate-500 p-4 rounded-lg max-w-[40%] max-h-[500px] space-y-4 overflow-hidden">
-      {/* onSubmit={handleSubmit(onSubmit)} */}
-
+    <form className="bg-slate-500 p-4 rounded-lg max-w-[40%] h-[500px] space-y-3 overflow-y-auto">
       {/* Name Field */}
       <div className="space-y-1">
         <label htmlFor="name" className="block text-white text-sm font-medium">
@@ -23,14 +74,15 @@ const Form = () => {
         <input
           id="name"
           {...register("name", { required: true })}
-          placeholder="Enter product name"
-          className="w-full p-1 rounded-md border border-gray-300"
+          placeholder={`${product.name}` || "Enter product name"}
+          className="w-full p-2 rounded-md border border-gray-300"
         />
         {errors.name && (
           <p className="text-red-500 text-sm">Name is required</p>
         )}
       </div>
 
+      {/* Category Field */}
       <div className="space-y-1">
         <label
           htmlFor="category"
@@ -41,8 +93,8 @@ const Form = () => {
         <input
           id="category"
           {...register("category", { required: true })}
-          placeholder="Enter category"
-          className="w-full p-1 rounded-md border border-gray-300"
+          placeholder={`${product.category}` || "Enter product category"}
+          className="w-full p-2 rounded-md border border-gray-300"
         />
         {errors.category && (
           <p className="text-red-500 text-sm">Category is required</p>
@@ -62,8 +114,8 @@ const Form = () => {
             type="number"
             id="price"
             {...register("price", { required: true })}
-            placeholder="Enter price"
-            className="w-full p-1 rounded-md border border-gray-300"
+            placeholder={`${product.price}` || "Enter product product"}
+            className="w-full p-2 rounded-md border border-gray-300"
           />
           {errors.price && (
             <p className="text-red-500 text-sm">Price is required</p>
@@ -81,8 +133,10 @@ const Form = () => {
             type="number"
             id="stock"
             {...register("stock", { required: true })}
-            placeholder="Enter stock amount"
-            className="w-full p-1 rounded-md border border-gray-300"
+            placeholder={
+              `${product.amountInStock}` || "Enter product stock amount"
+            }
+            className="w-full p-2 rounded-md border border-gray-300"
           />
           {errors.stock && (
             <p className="text-red-500 text-sm">Stock amount is required</p>
@@ -101,8 +155,8 @@ const Form = () => {
         <textarea
           id="description"
           {...register("description", { required: true })}
-          placeholder="Enter product description"
-          className="w-full p-1 rounded-md border border-gray-300"
+          placeholder={`${product.description}` || "Enter product description"}
+          className="w-full p-2 rounded-md border border-gray-300 h-36 resize-none"
         />
         {errors.description && (
           <p className="text-red-500 text-sm">Description is required</p>
@@ -112,13 +166,12 @@ const Form = () => {
       {/* Submit Button */}
       <button
         type="submit"
-        className="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 transition"
+        className="w-full  bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 transition"
       >
         Submit
       </button>
     </form>
   );
 };
-
 
 export default Form;

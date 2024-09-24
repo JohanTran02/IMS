@@ -63,16 +63,16 @@ export function ProductDetails() {
                     </div>
                     {
                         activeTab === "product" ? <>
-                            <input type="text" disabled={!isinEdit} value={`${product.name}`} className="h-12" />
-                            <input type="text" disabled={!isinEdit} value={`${product.category}`} className="h-12" />
+                            <input type="text" disabled value={`${product.name}`} className="h-12" />
+                            <input type="text" disabled value={`${product.category}`} className="h-12" />
                             <div className="flex gap-4">
-                                <input type="text" disabled={!isinEdit} value={`${product.price}`} className="h-12 flex-1 w-0" />
-                                <input type="text" disabled={!isinEdit} value={`${product.amountInStock}`} className="h-12 flex-1 w-0" />
+                                <input type="text" disabled value={`${product.price}`} className="h-12 flex-1 w-0" />
+                                <input type="text" disabled value={`${product.amountInStock}`} className="h-12 flex-1 w-0" />
                             </div>
-                            <textarea disabled={!isinEdit} value={`${product.description}`} className="resize-none h-[200px]" />
+                            <textarea disabled value={`${product.description}`} className="resize-none h-[200px]" />
                         </> :
                             <>
-                                <input type="text" disabled={!isinEdit} value={`${product.manufacturer.name}`} className="h-12" />
+                                <input type="text" disabled value={`${product.manufacturer.name}`} className="h-12" />
                                 <input type="text" disabled value={`${product.manufacturer.website}`} className="h-12" />
                                 <div className="flex flex-row gap-4">
                                     <input type="text" disabled value={`${product.manufacturer.address}`} className="h-12 flex-1 w-0" />

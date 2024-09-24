@@ -1,4 +1,4 @@
-import Editpage from "../components/Editpage";
+
 
 
 import FormPicker from "../components/FormPicker";
@@ -10,7 +10,7 @@ export function ProductEdit() {
         <div className="bg-purple-300 flex-1 flex flex-col gap-4 ">
      
             <div className="flex flex-col flex-1 gap-4">
-              <Editpage />
+              
               <FormPicker />
             
             </div>

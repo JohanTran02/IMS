@@ -10,22 +10,23 @@ const FormPicker = () => {
   const [ productForm, setProductForm ] = useState(true);
   return (
     <>
-      <div className="flex space-x-4">
+      <div className="flex space-x-4 px-6 py-2">
         <div
-          className="pointer-cursor"
-          onClick={() => setProductForm(!productForm)}
+          className={`cursor-pointer ${productForm ? "underline" : ""}`}
+          onClick={() => setProductForm(true)}
         >
           Product info
         </div>
         <div
-          className="pointer-cursor"
-          onClick={() => setProductForm(!productForm)}
+          className={`cursor-pointer ${!productForm ? "underline" : ""}`}
+          onClick={() => setProductForm(false)}
         >
           Manufacturer info
         </div>
-
       </div>
+      <div className="px-4">
         {productForm ? <Form /> : <ManufacturerForm />}
+      </div>
     </>
   );
 }
