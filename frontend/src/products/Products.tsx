@@ -164,7 +164,7 @@ export function Products() {
                   onChange={(e) => setInput(e.target.value)}
                 />
               </div>
-              <button className="font-semibold w-[120px] text-sm p-2 border rounded-lg bg-[#e0e0e0] hover:bg-green-400 transition-all">
+              <button onClick={() => navigate("/products/add")} className="font-semibold w-[120px] text-sm p-2 border rounded-lg bg-[#e0e0e0] hover:bg-green-400 transition-all">
                 Add product
               </button>
             </div>

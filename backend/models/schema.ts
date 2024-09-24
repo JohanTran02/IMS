@@ -54,8 +54,8 @@ const totalStockValueType = new GraphQLObjectType({
 const ContactInputType = new GraphQLInputObjectType({
     name: "ContactInput",
     fields: () => ({
-        name: { type: new GraphQLNonNull(GraphQLString) },
-        email: { type: new GraphQLNonNull(GraphQLString) },
+        name: { type: GraphQLString },
+        email: { type: GraphQLString },
         phone: { type: GraphQLString },
     }),
 
@@ -64,11 +64,11 @@ const ContactInputType = new GraphQLInputObjectType({
 const ManufacturerInputType = new GraphQLInputObjectType({
     name: "ManufacturerInput",
     fields: {
-        name: { type: new GraphQLNonNull(GraphQLString) },
+        name: { type: GraphQLString },
         description: { type: GraphQLString },
-        country: { type: new GraphQLNonNull(GraphQLString) },
+        country: { type: GraphQLString },
         website: { type: GraphQLString },
-        address: { type: new GraphQLNonNull(GraphQLString) },
+        address: { type: GraphQLString },
         contact: { type: ContactInputType }
     },
 })
