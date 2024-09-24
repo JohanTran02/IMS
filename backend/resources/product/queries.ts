@@ -1,5 +1,5 @@
-import { GraphQLID, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
-import { GetProductsFilterInput, ManufacturerType, ProductType, totalStockValueType } from "../../models/schema";
+import { GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
+import { GetProductsFilterInput, ManufacturerType, PageProducts, ProductType, totalStockValueType } from "../../models/schema";
 import { getCriticalStockProducts, getlowStockProducts, getProduct, getProducts, getTotalStockValue, getTotalStockValueByManufacturer, getManufacturers } from "./resolvers";
 import { IManufacturer } from "../manufacturer/types";
 
@@ -7,7 +7,7 @@ export const productQuery = new GraphQLObjectType({
     name: "productQuery",
     fields: () => ({
         products: {
-            type: new GraphQLList(ProductType),
+            type: PageProducts(ProductType),
             args: {
                 input: { type: GetProductsFilterInput },
             },

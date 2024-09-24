@@ -126,4 +126,14 @@ const GetProductsFilterInput = new GraphQLInputObjectType({
     }
 })
 
-export { CreateProductInput, UpdateProductInput, totalStockValueType, ManufacturerType, ProductType, GetProductsFilterInput };
+const PageProducts = (itemType) => {
+    return new GraphQLObjectType({
+        name: 'PageType',
+        fields: () => ({
+            totalCount: { type: GraphQLInt },
+            products: { type: new GraphQLList(itemType) },
+        })
+    })
+}
+
+export { CreateProductInput, UpdateProductInput, totalStockValueType, ManufacturerType, ProductType, GetProductsFilterInput, PageProducts };
