@@ -1,27 +1,27 @@
-import { gql, useLazyQuery, TypedDocumentNode } from "@apollo/client";
+import { gql, TypedDocumentNode, useLazyQuery } from "@apollo/client";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 import { RootState } from "../redux/store";
 import { IProduct } from "../types";
 import ProductCard from "./ProductCard";
-import { useNavigate } from "react-router";
 
 type ProductData = {
   product: {
     products: {
-      products: IProduct[],
-      totalCount: number
-    }
+      products: IProduct[];
+      totalCount: number;
+    };
   };
 };
 
 type ProductVars = {
   input: {
-    limit: number,
-    page: number
-  }
-}
+    limit: number;
+    page: number;
+  };
+};
 
 const GET_PRODUCTS: TypedDocumentNode<ProductData, ProductVars> = gql`
   query Product($input: GetProductsFilterInput) {
@@ -34,8 +34,8 @@ const GET_PRODUCTS: TypedDocumentNode<ProductData, ProductVars> = gql`
           category
           manufacturer {
             name
-            }
-            amountInStock
+          }
+          amountInStock
         }
         totalCount
       }
@@ -45,29 +45,30 @@ const GET_PRODUCTS: TypedDocumentNode<ProductData, ProductVars> = gql`
 
 export function Products() {
   const [input, setInput] = useState<string>("");
+  const [pageOptions, setPageOptions] = useState<
+    { value: number; label: string }[]
+  >([]);
   const { page, rows } = useSelector((state: RootState) => state.products);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const rowOptions = [
-    { value: 10, label: "10" },
-    { value: 25, label: "25" },
     { value: 50, label: "50" },
     { value: 100, label: "100" },
   ];
 
-  const pageOptions = [
-    { value: 1, label: "1" },
-    { value: 2, label: "2" },
-    { value: 3, label: "3" },
-    { value: 4, label: "4" },
-    { value: 5, label: "5" },
-    { value: 6, label: "6" },
-    { value: 7, label: "7" },
-    { value: 8, label: "8" },
-    { value: 9, label: "9" },
-    { value: 10, label: "10" },
-  ];
+  // const pageOptions = [
+  //   { value: 1, label: "1" },
+  //   { value: 2, label: "2" },
+  //   { value: 3, label: "3" },
+  //   { value: 4, label: "4" },
+  //   { value: 5, label: "5" },
+  //   { value: 6, label: "6" },
+  //   { value: 7, label: "7" },
+  //   { value: 8, label: "8" },
+  //   { value: 9, label: "9" },
+  //   { value: 10, label: "10" },
+  // ];
 
   const [getProducts, { data, error, loading }] = useLazyQuery(GET_PRODUCTS, {
     variables: {
@@ -78,10 +79,10 @@ export function Products() {
     },
   });
 
-  const products = data?.product.products.products || [] as IProduct[];
+  const products = data?.product.products.products || ([] as IProduct[]);
   const totalCount = data?.product.products.totalCount;
-  console.log(products)
-  console.log(totalCount)
+  // console.log(products)
+  // console.log(totalCount)
 
   useEffect(() => {
     getProducts({
@@ -93,6 +94,17 @@ export function Products() {
       },
     });
   }, []);
+
+  useEffect(() => {
+    if (!totalCount) return;
+
+    const totalPages = [];
+    for (let i = 1; i < totalCount; i++) {
+      totalPages.push({ value: i, label: i.toString() });
+    }
+
+    setPageOptions(totalPages);
+  }, [data, rows]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error</div>;
@@ -117,17 +129,19 @@ export function Products() {
     return (
       <li
         key={card.sku}
-        className="group flex-none flex justify-between items-center h-12 border-b border-gray-200 cursor-pointer"
+        className="group flex-none flex items-center gap-2 h-12 cursor-pointer"
         onClick={() => navigate(`/products/${card.sku}`)}
       >
-        <ProductCard
-          name={card.name}
-          sku={card.sku}
-          price={card.price}
-          category={card.category}
-          amountInStock={card.amountInStock}
-          manufacturer={card.manufacturer.name}
-        />
+        <div className="flex justify-between items-center border-b border-gray-200 h-full w-full">
+          <ProductCard
+            name={card.name}
+            sku={card.sku}
+            price={card.price}
+            category={card.category}
+            amountInStock={card.amountInStock}
+            manufacturer={card.manufacturer.name}
+          />
+        </div>
       </li>
     );
   };
@@ -165,7 +179,7 @@ export function Products() {
                   onChange={(e) => setInput(e.target.value)}
                 />
               </div>
-              <button className="font-semibold w-[120px] h-[40px] border rounded-lg bg-[#e0e0e0] hover:bg-green-400 transition-all">
+              <button className="font-semibold w-[120px] text-sm p-2 border rounded-lg bg-[#e0e0e0] hover:bg-green-400 transition-all">
                 Add product
               </button>
             </div>
@@ -187,8 +201,7 @@ export function Products() {
               </div>
 
               <ul className="overflow-y-auto">
-                {products &&
-                  products.map((card) => searchConditions(card))}
+                {products && products.map((card) => searchConditions(card))}
               </ul>
 
               <div className="sticky bottom-0 left-0 bg-gray-100 flex items-center gap-2 py-2 pl-4 text-sm">
@@ -204,7 +217,7 @@ export function Products() {
                     validPageValues(Number(value));
                   }}
                 />
-                <datalist id="page">
+                <datalist id="page" className="h-20">
                   {pageOptions.map((option) => (
                     <option key={option.value} value={option.label} />
                   ))}
@@ -250,6 +263,6 @@ export function Products() {
         <div className="bg-zinc-400 p-3">Settings</div>
       </div>
       <div className="bg-yellow-400"> asdfasd fasdfasd fasdftest</div>
-    </div >
+    </div>
   );
 }
