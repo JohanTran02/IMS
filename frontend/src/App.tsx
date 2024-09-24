@@ -5,6 +5,7 @@ import { ProductDetails } from "./products/ProductDetails"
 import { ProductEdit } from "./products/ProductEdit"
 import { ProductLayout } from "./products/ProductLayout"
 import { Products } from "./products/Products"
+import { ProductAdd } from "./products/ProductAdd"
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
                             <Route element={<ProductLayout />}>
                                 <Route path=":sku" element={<ProductDetails />} />
                                 <Route path="edit" element={<ProductEdit />} />
+                                <Route path="add" element={<ProductAdd />} />
                             </Route>
                         </Route>
                     </Route>
