@@ -44,6 +44,7 @@ export function ProductDetails() {
     const { sku } = useParams();
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState<"product" | "manufacturer">("product");
+
     const { error, loading, data } = useQuery<IProductData, IProductVars>(GET_PRODUCT, {
         variables: { sku: sku }
     })

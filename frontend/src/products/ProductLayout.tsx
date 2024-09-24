@@ -2,12 +2,22 @@ import { Outlet } from "react-router-dom";
 
 export function ProductLayout() {
     return (
-        <>
-            <div className="bg-blue-300 h-full flex flex-col gap-4">
-                <div className="bg-green-300 h-40 flex p-3">Header</div>
-                <Outlet />
+      <>
+        <div className="bg-blue-300 h-full flex flex-col gap-4">
+          <div className="bg-white rounded-lg flex-auto min-w-[75%] max-h-[40%]  ">
+            <h2 className="m-8 font-semibold underline text-xl "> Edit Product</h2>
+            <div className="text-gray-500 max-w-[50%]  max-h-36 m-8">
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae
+              laudantium odit, corrupti cumque consequuntur expedita fugiat fuga
+              quidem quia harum. Fugiat ea minima numquam autem voluptatem
+              inventore? Itaque, numquam praesentium nesciunt ab quaerat impedit
+              est, assumenda, voluptates dolore illo voluptate nobis debitis
+              possimus amet velit deserunt! Eveniet tenetur eum repudiandae?
             </div>
-        </>
-    )
+          </div>
+          <Outlet />
+        </div>
+      </>
+    );
 }
 

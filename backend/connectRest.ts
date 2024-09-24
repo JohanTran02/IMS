@@ -2,10 +2,10 @@ import mongoose from "mongoose";
 import "dotenv/config";
 
 
-const mongoURI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@imscluster.zenqj.mongodb.net/?retryWrites=true&w=majority&appName=imscluster;`;
+const mongoURI = `${process.env.DB_URL}`;
  
  const restConnection  = () => {mongoose
-  .connect(String(process.env.DB_URL))
+  .connect(String(mongoURI))
   .then(() => {
     console.log("MongoDB connected");
   })
