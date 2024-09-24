@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 
 import { gql, TypedDocumentNode, useQuery } from "@apollo/client";
 
-import { IProduct } from "../../../backend/resources/product/types";
+import { IProduct } from "../../../../backend/resources/product/types";
 import { useParams } from "react-router";
 
 interface IProductData {
@@ -48,20 +48,20 @@ const Form = () => {
     formState: { errors },
   } = useForm();
 
-   const { sku } = useParams();
-   
+  const { sku } = useParams();
 
-   const { error, loading, data } = useQuery<IProductData, IProductVars>(
-     GET_PRODUCT,
-     {
-       variables: { sku: sku },
-     }
-   );
 
-   const product = data?.product?.product || ({} as IProduct);
+  const { error, loading, data } = useQuery<IProductData, IProductVars>(
+    GET_PRODUCT,
+    {
+      variables: { sku: sku },
+    }
+  );
 
-   if (loading) return null;
-   if (error) return `Error! ${error.message}`;
+  const product = data?.product?.product || ({} as IProduct);
+
+  if (loading) return null;
+  if (error) return `Error! ${error.message}`;
 
 
   return (

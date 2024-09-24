@@ -1,7 +1,7 @@
 
 
 
-import FormPicker from "../components/FormPicker";
+import FormPicker from "./Form/FormPicker";
 
 
 export function ProductEdit() {
