@@ -1,34 +1,5 @@
-import { GraphQLID, GraphQLInputObjectType, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString, graphqlSync } from "graphql";
-
-//REST
-export interface UserREST {
-    id: string,
-    name: string,
-}
-
-//GraphQL
-const ContactType = new GraphQLObjectType({
-    name: "Contact",
-    fields: () => ({
-        name: { type: GraphQLString },
-        email: { type: GraphQLString },
-        phone: { type: GraphQLString },
-    }),
-
-})
-
-const ManufacturerType = new GraphQLObjectType({
-    name: "Manufacturer",
-    fields: {
-        _id: { type: GraphQLID },
-        name: { type: GraphQLString },
-        description: { type: GraphQLString },
-        country: { type: GraphQLString },
-        website: { type: GraphQLString },
-        address: { type: GraphQLString },
-        contact: { type: ContactType }
-    },
-})
+import { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLInt, GraphQLInputObjectType, GraphQLNonNull, GraphQLList } from "graphql";
+import { ManufacturerType, ManufacturerInputType } from "../manufacturer/schema";
 
 const ProductType = new GraphQLObjectType({
     name: "Product",
@@ -49,28 +20,6 @@ const totalStockValueType = new GraphQLObjectType({
     fields: {
         total: { type: GraphQLInt }
     }
-})
-
-const ContactInputType = new GraphQLInputObjectType({
-    name: "ContactInput",
-    fields: () => ({
-        name: { type: GraphQLString },
-        email: { type: GraphQLString },
-        phone: { type: GraphQLString },
-    }),
-
-})
-
-const ManufacturerInputType = new GraphQLInputObjectType({
-    name: "ManufacturerInput",
-    fields: {
-        name: { type: GraphQLString },
-        description: { type: GraphQLString },
-        country: { type: GraphQLString },
-        website: { type: GraphQLString },
-        address: { type: GraphQLString },
-        contact: { type: ContactInputType }
-    },
 })
 
 const CreateProductInput = new GraphQLInputObjectType({
@@ -136,4 +85,4 @@ const PageProducts = (itemType) => {
     })
 }
 
-export { CreateProductInput, UpdateProductInput, totalStockValueType, ManufacturerType, ProductType, GetProductsFilterInput, PageProducts };
+export { ProductType, totalStockValueType, CreateProductInput, UpdateProductInput, NumberRangeFilterInput, StringFilterInput, GetProductsFilterInput, PageProducts }

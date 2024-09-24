@@ -1,5 +1,5 @@
 import express from "express";
-import Projectroutes from "./resources/product/products.routes";
+import Projectroutes from "./resources/product/products.routes"
 import restConnection from "./connectRest";
 
 

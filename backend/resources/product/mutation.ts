@@ -1,6 +1,6 @@
 import { GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
-import { CreateProductInput, ProductType, UpdateProductInput } from "../../models/schema";
 import { addProduct, deleteProduct, updateProduct } from "./resolvers";
+import { ProductType, CreateProductInput, UpdateProductInput } from "./schema";
 
 export const productMutation = new GraphQLObjectType({
     name: "productMutations",

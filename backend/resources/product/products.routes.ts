@@ -8,7 +8,7 @@ router.get("/api/product/:id", getProductById);
 router.get("/api/products", getProducts);
 router.get("/api/products/stockValue", getStockValue);
 router.get("/api/products/lowStock", showLowStock)
-router.get("/api/products/stockValueByManufacturer", getStockValueByManufacturer) ;
+router.get("/api/products/stockValueByManufacturer", getStockValueByManufacturer);
 router.get("/api/products/criticalStock", showCriticalStock)
 
 router.post("/api/product", postProduct);

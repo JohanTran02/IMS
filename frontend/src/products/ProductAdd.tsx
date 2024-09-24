@@ -26,13 +26,6 @@ mutation RootMutation($input: CreateProductInput) {
     }
 }`;
 
-// name: { type: new GraphQLNonNull(GraphQLString) },
-// description: { type: GraphQLString },
-// price: { type: new GraphQLNonNull(GraphQLInt) },
-// category: { type: GraphQLString },
-// manufacturer: { type: ManufacturerInputType },
-// amountInStock: { type: new GraphQLNonNull(GraphQLInt) }
-
 export function ProductAdd() {
     const navigate = useNavigate();
 
