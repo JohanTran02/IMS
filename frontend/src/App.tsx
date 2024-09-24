@@ -5,6 +5,7 @@ import { ProductDetails } from "./products/ProductDetails"
 import { ProductEdit } from "./products/ProductEdit"
 import { ProductLayout } from "./products/ProductLayout"
 import { Products } from "./products/Products"
+import { ProductAdd } from "./products/ProductAdd"
 
 function App() {
     return (
@@ -17,7 +18,8 @@ function App() {
                             <Route index element={<Products />} />
                             <Route element={<ProductLayout />}>
                                 <Route path=":sku" element={<ProductDetails />} />
-                                <Route path="edit" element={<ProductEdit />} />
+                                <Route path="edit/:sku" element={<ProductEdit />} />
+                                <Route path="add" element={<ProductAdd />} />
                             </Route>
                         </Route>
                     </Route>

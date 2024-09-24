@@ -1,7 +1,7 @@
 import { gql, TypedDocumentNode, useQuery } from "@apollo/client";
 import { useState } from "react";
 import { IProduct } from "../../../backend/resources/product/types";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 interface IProductData {
     product: {
@@ -42,6 +42,7 @@ const GET_PRODUCT: TypedDocumentNode<IProductData, IProductVars> = gql`
 
 export function ProductDetails() {
     const { sku } = useParams();
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState<"product" | "manufacturer">("product");
     const { error, loading, data } = useQuery<IProductData, IProductVars>(GET_PRODUCT, {
         variables: { sku: sku }
@@ -88,6 +89,7 @@ export function ProductDetails() {
                                 </div>
                             </>
                     }
+                    <button onClick={() => navigate(`/products/edit/${sku}`)}>Edit Product</button>
                 </div>
                 <div className="bg-lime-300 flex flex-col flex-1 w-0 gap-4">
                     <div className="bg-cyan-300 h-[150px]">Total stock value diagram</div>
