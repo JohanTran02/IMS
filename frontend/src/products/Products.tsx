@@ -57,19 +57,6 @@ export function Products() {
     { value: 100, label: "100" },
   ];
 
-  // const pageOptions = [
-  //   { value: 1, label: "1" },
-  //   { value: 2, label: "2" },
-  //   { value: 3, label: "3" },
-  //   { value: 4, label: "4" },
-  //   { value: 5, label: "5" },
-  //   { value: 6, label: "6" },
-  //   { value: 7, label: "7" },
-  //   { value: 8, label: "8" },
-  //   { value: 9, label: "9" },
-  //   { value: 10, label: "10" },
-  // ];
-
   const [getProducts, { data, error, loading }] = useLazyQuery(GET_PRODUCTS, {
     variables: {
       input: {
@@ -81,8 +68,6 @@ export function Products() {
 
   const products = data?.product.products.products || ([] as IProduct[]);
   const totalCount = data?.product.products.totalCount;
-  // console.log(products)
-  // console.log(totalCount)
 
   useEffect(() => {
     getProducts({
@@ -162,7 +147,7 @@ export function Products() {
   return (
     <div className="flex h-full gap-2 flex-col">
       <div className="flex flex-1 gap-4 overflow-hidden">
-        <div className="flex-1 bg-white flex flex-col gap-8 py-6 rounded-3xl">
+        <div className="flex-1 bg-white flex flex-col gap-8 py-6 rounded">
           <div>
             <div className="border-b border-b-gray-200 pb-4">
               <h1 className="font-semibold text-3xl px-8">Manage Products</h1>

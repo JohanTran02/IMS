@@ -1,17 +1,22 @@
-import { Link, Outlet } from "react-router-dom"
-
+import { Link, Outlet } from "react-router-dom";
 
 export function Layout() {
-    return (
-        <>
-            <nav className="bg-red-300 flex flex-col px-4 pt-2">
-                <Link to="/">Overview</Link>
-                <Link to="/products">Products</Link>
-                <Link to="/products/edit">Edit</Link>
-            </nav>
-            <div className="bg-blue-300 w-full p-3">
-                <Outlet />
-            </div>
-        </>
-    )
+  return (
+    <>
+      <nav className="bg-white flex flex-col">
+        <div className="p-4 hover:bg-blue-300 cursor-pointer transition-all">
+          <Link to="/">Overview</Link>
+        </div>
+        <div className="p-4 hover:bg-blue-300 cursor-pointer transition-all">
+          <Link to="/products">Products</Link>
+        </div>
+        <div className="p-4 hover:bg-blue-300 cursor-pointer transition-all">
+          <Link to="/products/edit">Edit</Link>
+        </div>
+      </nav>
+      <div className="bg-blue-300 w-full p-3">
+        <Outlet />
+      </div>
+    </>
+  );
 }
