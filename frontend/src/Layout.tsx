@@ -10,9 +10,6 @@ export function Layout() {
         <div className="p-4 hover:bg-blue-300 cursor-pointer transition-all">
           <Link to="/products">Products</Link>
         </div>
-        <div className="p-4 hover:bg-blue-300 cursor-pointer transition-all">
-          <Link to="/products/edit">Edit</Link>
-        </div>
       </nav>
       <div className="bg-blue-300 w-full p-3">
         <Outlet />

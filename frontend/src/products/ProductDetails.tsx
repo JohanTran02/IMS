@@ -43,7 +43,6 @@ const GET_PRODUCT: TypedDocumentNode<IProductData, IProductVars> = gql`
 export function ProductDetails() {
     const { sku } = useParams();
     const navigate = useNavigate();
-    const [activeTab, setActiveTab] = useState<"product" | "manufacturer">("product");
 
     const { error, loading, data } = useQuery<IProductData, IProductVars>(GET_PRODUCT, {
         variables: { sku: sku }
@@ -59,18 +58,8 @@ export function ProductDetails() {
             <div className="bg-white flex-1 flex gap-4 ">
                 <div className="flex-1">
                     <div className="bg-blue-200 flex gap-3 py-4 px-4">
-                        <h1
-                            className={"flex-1 font-bold text-2xl"}
-                            onClick={() => setActiveTab("product")}
-                        >
-                            Product info
-                        </h1>
-                        <h1
-                            className={"flex-1 font-bold text-2xl"}
-                            onClick={() => setActiveTab("manufacturer")}
-                        >
-                            Manufacturer info
-                        </h1>
+                        <h1 className={"flex-1 font-bold text-2xl"}>Product info</h1>
+                        <h1 className={"flex-1 font-bold text-2xl"}>Manufacturer info</h1>
                     </div>
 
                     <div className="flex gap-4 p-2 mx-2">

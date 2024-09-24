@@ -155,10 +155,14 @@ export const addProduct = async (input) => {
   return await Product.create(newProduct);
 };
 
-export const deleteProduct = async (_id) => {
-  return await Product.findByIdAndDelete(_id);
+export const deleteProduct = async (sku) => {
+
+  const deletedProduct = await Product.findOneAndDelete({ sku: sku })
+
+  return deletedProduct ? "Product removed" : "Product not found"
 };
 
-export const updateProduct = async (_id, input) => {
-  return await Product.findByIdAndUpdate(_id, input, { new: true });
+export const updateProduct = async (sku, input) => {
+  const updatedProduct = await Product.findOneAndUpdate({ sku: sku }, input, { new: true });
+  return updatedProduct ?? {} as IProduct
 };

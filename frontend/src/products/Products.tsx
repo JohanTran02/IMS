@@ -244,10 +244,7 @@ export function Products() {
             </div>
           </div>
         </div>
-
-        <div className="bg-zinc-400 p-3">Settings</div>
       </div>
-      <div className="bg-yellow-400"> asdfasd fasdfasd fasdftest</div>
     </div>
   );
 }
