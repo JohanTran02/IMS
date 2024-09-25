@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import { Product } from "../../models/models";
 import { Request, Response } from "express";
 
@@ -20,10 +19,9 @@ export const getProductById = async (req: Request, res: Response) => {
 
   try {
     const product = await Product.findById(productId);
-    console.log(product)
-    // if (!product) {
-    //   return res.status(404).json({ message: "Product not found" });
-    // }
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
     res.status(200).json(product);
   } catch (err) {
     res.status(500).json({ message: "Server Error", error: err.message });

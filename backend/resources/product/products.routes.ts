@@ -2,8 +2,6 @@ import express from "express";
 import { deleteProduct, getProductById, getProducts, postProduct, updateProduct, getStockValue, getStockValueByManufacturer, showLowStock, showCriticalStock, getManufacturers } from "./products.controller";
 const router = express.Router();
 
-
-
 router.get("/api/product/:id", getProductById);
 router.get("/api/products", getProducts);
 router.get("/api/products/stockValue", getStockValue);
