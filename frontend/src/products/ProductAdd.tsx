@@ -52,22 +52,22 @@ export function ProductAdd() {
         navigate("/products")
     }
 
-
     if (loading) return 'Submitting...';
     if (error) return `Submission error! ${error.message}`;
 
     const Input = ({ label, register, type, required }: ProductProps) => (
-        <div className="flex flex-col gap-2 w-full">
-            <label>{label}</label>
+        <div className="flex flex-col gap-2 w-full justify-evenly">
+            <label className="font-semibold text-lg">{label}</label>
+            {errors[label] && errors[label].type === "required" && (<span className="text-red-500">{label} is required.</span>)}
             <input type={type} {...register(label, { required, valueAsNumber: type === "number" ? true : false })} placeholder={label} className="h-12" />
         </div>
     )
 
     return (
         <>
-            <div className="bg-purple-300 flex-1 flex gap-4 p-4">
-                <Form onSubmit={async ({ data }) => onSubmit(data)} control={control} className="flex flex-col flex-1 gap-4 w-0">
-                    <div className="bg-teal-300 flex gap-3">
+            <div className="flex-1 flex gap-4 p-4">
+                <Form onSubmit={async ({ data }) => onSubmit(data)} control={control} className="flex flex-col flex-1 gap-4">
+                    <div className="flex gap-3 text-xl font-bold">
                         <p className={activeTab === "product" ? "underline" : ""} onClick={() => setActiveTab("product")}>Product info</p>
                         <p className={activeTab === "manufacturer" ? "underline" : ""} onClick={() => setActiveTab("manufacturer")}>Manufacturer info</p>
                     </div>
@@ -79,7 +79,7 @@ export function ProductAdd() {
                                 <Input label="Product Price" register={register} type="number" required />
                                 <Input label="Product Stock Amount" register={register} type="number" required />
                             </div>
-                            <label>Product Description</label>
+                            <label className="font-bold text-lg">Product Description</label>
                             <textarea placeholder={`Product Description`} className="resize-none h-[200px]" {...register("Product Description")} />
                         </> :
                             <>
@@ -109,8 +109,8 @@ export function ProductAdd() {
                                 </div> */}
                             </>
                     }
-                    <div className="ml-auto mt-auto space-x-4">
-                        <input type="submit" value={"Add Product"} />
+                    <div className="ml-auto mt-auto space-x-4 text-lg">
+                        <input type="submit" className="cursor-pointer" value={"Add Product"} />
                         <button onClick={() => navigate(-1)}>Cancel</button>
                     </div>
                 </Form>
