@@ -10,10 +10,17 @@ import {
 import { faker } from "@faker-js/faker";
 
 export const getProducts = async (input: IGetProductFilterInput) => {
-  if (!input) return await Product.find().limit(0);
+  if (!input) {
+    const products = await Product.find();
+
+    return {
+      totalCount: products.length,
+      products
+    }
+  }
 
   const { amountInStock, price, category, manufacturers, limit, page } = input;
-  const productLimit = limit ?? 0;
+  const productLimit = limit ?? 1;
   const pageOffset = page === 1 || !page ? 0 : page + 1;
 
   const query: ProductQuery = {};
@@ -40,7 +47,7 @@ export const getProducts = async (input: IGetProductFilterInput) => {
     .limit(productLimit)
     .skip(pageOffset * productLimit);
 
-  const totalCount = Math.ceil((await Product.find().countDocuments()) / productLimit);
+  const totalCount = Math.ceil((await Product.find().countDocuments()) / productLimit === 0 ? 1 : productLimit);
 
   return {
     totalCount,
