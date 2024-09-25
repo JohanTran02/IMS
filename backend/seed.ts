@@ -10,7 +10,7 @@ connectToDB()
 function generateData(): IProduct[] {
     const array: IProduct[] = [];
 
-    for (let i = 0; i <= 5; i++) {
+    for (let i = 0; i <= 1000; i++) {
         const fakeProduct = createRandomProduct();
         array.push(fakeProduct);
     }
