@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 
 import { gql, TypedDocumentNode, useQuery } from "@apollo/client";
-import { IProduct } from "../../../backend/resources/product/types";
+import { IProduct } from "../../../../backend/resources/product/types";
 import { useParams } from "react-router";
 
 interface IProductData {
@@ -48,7 +48,7 @@ const ManufacturerForm = () => {
     formState: { errors },
   } = useForm();
   const { sku } = useParams();
-  
+
 
   const { error, loading, data } = useQuery<IProductData, IProductVars>(
     GET_PRODUCT,
@@ -208,7 +208,7 @@ const ManufacturerForm = () => {
               type="email"
               id="contactEmail"
               {...register("contactEmail", { required: true })}
-                placeholder={
+              placeholder={
                 `${product.manufacturer.contact.email}` || "Enter contact email"
               }
               className="w-full p-2 rounded-md border border-gray-300"
@@ -230,7 +230,7 @@ const ManufacturerForm = () => {
               type="tel"
               id="contactPhone"
               {...register("contactPhone", { required: true })}
-                placeholder={
+              placeholder={
                 `${product.manufacturer.contact.phone}` || "Enter contact phone number"
               }
               className="w-full p-2 rounded-md border border-gray-300"

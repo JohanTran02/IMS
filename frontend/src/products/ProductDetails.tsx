@@ -1,5 +1,4 @@
 import { gql, TypedDocumentNode, useQuery } from "@apollo/client";
-import { useState } from "react";
 import { IProduct } from "../../../backend/resources/product/types";
 import { useNavigate, useParams } from "react-router";
 

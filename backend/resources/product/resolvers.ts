@@ -39,9 +39,8 @@ export const getProducts = async (input: IGetProductFilterInput) => {
   const products = await Product.find(query)
     .limit(productLimit)
     .skip(pageOffset * productLimit);
-  const totalCount = Math.ceil(
-    (await Product.find().countDocuments()) / productLimit
-  );
+
+  const totalCount = Math.ceil((await Product.find().countDocuments()) / productLimit);
 
   return {
     totalCount,
@@ -70,7 +69,6 @@ function setNumberRange(numberRange: NumberRangeFilter): NumberRangeQuery {
     if (value !== undefined && !isNaN(Number(value))) {
       // Ex. query[operatorMapping[operator]] = ($gt = value)
       query[operatorMapping[operator]] = Number(value);
-      console.log(operator, operatorMapping, operatorMapping[operator]);
     }
   }
 

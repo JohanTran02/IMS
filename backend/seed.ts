@@ -10,7 +10,7 @@ connectToDB()
 function generateData(): IProduct[] {
     const array: IProduct[] = [];
 
-    for (let i = 0; i <= 5; i++) {
+    for (let i = 0; i <= 1000; i++) {
         const fakeProduct = createRandomProduct();
         array.push(fakeProduct);
     }
@@ -20,7 +20,6 @@ function generateData(): IProduct[] {
 
 function createRandomProduct(): IProduct {
     return {
-        // _id: faker.database.mongodbObjectId(),
         name: faker.commerce.product(),
         sku: faker.commerce.isbn(),
         description: faker.commerce.productDescription(),
@@ -33,7 +32,6 @@ function createRandomProduct(): IProduct {
 
 function createRandomManufacturer(): IManufacturer {
     return {
-        _id: faker.database.mongodbObjectId(),
         name: faker.company.name(),
         description: faker.company.catchPhrase(),
         country: faker.location.country(),
